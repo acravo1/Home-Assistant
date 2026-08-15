@@ -1,3 +1,3 @@
-h1 Available Blueprints
+# Available Blueprints
 
 . Watering sector
