@@ -1,0 +1,135 @@
+# ==============================================================================
+# TIPO DE ESTRUTURA: Blueprint / Modelo Reutilizável Dinâmico com Inputs de Utilizador
+# CATEGORIA: Logística e Monitorização Perimetral (Caixa de Correio)
+# REUTILIZAÇÃO: v2.3 - Totalmente Integrado com o Novo Script de Notificação Completa
+# ==============================================================================
+blueprint:
+  name: "Gestão de Caixa de Correio com Central de Voz Dinâmica"
+  description: "Monitoriza a entrada de cartas e a abertura da porta para recolha, incrementa o contador e chama a função central de voz da casa."
+  domain: automation
+  input:
+    sensor_movimento_ranhura:
+      name: Sensor de Movimento (Ranhura)
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion
+    sensor_porta_caixa:
+      name: Sensor de Abertura (Porta Principal)
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: door
+    contador_correio:
+      name: Ajudante Contador
+      selector:
+        entity:
+          domain: counter
+    # --- Novos Inputs Visuais de Integração ---
+    coluna_som:
+      name: Coluna de Som (Altifalante)
+      description: "Coluna que vai ditar os avisos por voz (TTS)."
+      selector:
+        entity:
+          domain: media_player
+    lampada_aviso:
+      name: Lâmpada de Aviso
+      description: "Lâmpada que vai piscar em caso de alerta (Opcional)."
+      default: []
+      selector:
+        entity:
+          domain: light
+    cor_da_luz:
+      name: Cor da Luz (RGB)
+      description: "Escolha a cor para o piscar da lâmpada."
+      default: [255, 255, 0] # Amarelo por defeito para correio
+      selector:
+        color_rgb: {}
+    forcar_prioridade_correio:
+      name: Forçar Prioridade Máxima
+      description: "Ative se quiser ser avisado mesmo durante o horário restrito."
+      default: false
+      selector:
+        boolean: {}
+    hora_inicio:
+      name: Ajudante Hora de Início
+      description: "Auxiliar (input_datetime) para início do período permitido (se não prioritário)."
+      selector:
+        entity:
+          domain: input_datetime
+    hora_fim:
+      name: Ajudante Hora de Fim
+      description: "Auxiliar (input_datetime) para fim do período permitido (se não prioritário)."
+      selector:
+        entity:
+          domain: input_datetime
+
+mode: single
+
+variables:
+  contador_entidade: !input contador_correio
+  coluna_var: !input coluna_som
+  luz_var: !input lampada_aviso
+  cor_var: !input cor_da_luz
+  prio_var: !input forcar_prioridade_correio
+  ajudante_in: !input hora_inicio
+  ajudante_fi: !input hora_fim
+
+trigger:
+  - platform: state
+    entity_id: !input sensor_movimento_ranhura
+    to: "on"
+    id: nova_carta
+  - platform: state
+    entity_id: !input sensor_porta_caixa
+    to: "on"
+    id: recolha_correio
+
+condition: []
+
+action:
+  - choose:
+      # CENÁRIO 1: Nova Carta Recebida
+      - conditions:
+          - condition: trigger
+            id: nova_carta
+          # Filtro de resguardo de 60 segundos para evitar disparos falsos repetidos
+          - condition: template
+            value_template: "{{ (now() - this.attributes.last_triggered | default(today_at(), true)).total_seconds() > 60 }}"
+        sequence:
+          - action: counter.increment
+            target:
+              entity_id: !input contador_correio
+          
+          # INTEGRADO: Envia dados para o novo script dinâmico com restauro de luz
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: >-
+                Atenção. Acabou de chegar correio à tua caixa postal.
+                Neste momento tens {{ states(contador_entidade) }} entregas pendentes para recolha.
+              target_media_player: "{{ coluna_var }}"
+              target_luz: "{{ luz_var }}"
+              cor_luz: "{{ cor_var }}"
+              forcar_prioridade: "{{ prio_var }}"
+              auxiliar_inicio: "{{ ajudante_in }}"
+              auxiliar_fim: "{{ ajudante_fi }}"
+
+      # CENÁRIO 2: Recolha do Correio Efetuada
+      - conditions:
+          - condition: trigger
+            id: recolha_correio
+        sequence:
+          - action: counter.reset
+            target:
+              entity_id: !input contador_correio
+          
+          # INTEGRADO: Envia o aviso de reposição para o script dinâmico
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: "Correio recolhido com sucesso. O contador de cartas foi reposto a zero."
+              target_media_player: "{{ coluna_var }}"
+              target_luz: "{{ luz_var }}"
+              cor_luz: "{{ cor_var }}"
+              forcar_prioridade: "{{ prio_var }}"
+              auxiliar_inicio: "{{ ajudante_in }}"
+              auxiliar_fim: "{{ ajudante_fi }}"
