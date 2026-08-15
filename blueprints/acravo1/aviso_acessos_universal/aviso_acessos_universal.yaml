@@ -1,0 +1,155 @@
+blueprint:
+  name: "Monitorização avançada de Portas com Central de Voz"
+  description: "v.2.3 - Modo Paralelo corrigido para evitar atrasos no fecho e falhas no restauro de luz."
+  domain: automation
+  input:
+    sensores_sempre:
+      name: Sensores - Sempre Ativos (Prioridade Máxima)
+      description: "Sensores que vão gerar notificações a qualquer hora. Ignoram as restrições."
+      default: []
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class:
+            - door
+            - window
+          multiple: true
+    sensores_horario:
+      name: Sensores - Com Horário Restrito
+      description: "Sensores sujeitos ao horário definido abaixo."
+      default: []
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class:
+            - door
+            - window
+          multiple: true
+    hora_inicio:
+      name: Ajudante Hora de Início
+      description: "Auxiliar (input_datetime) para início das notificações restritas."
+      selector:
+        entity:
+          domain: input_datetime
+    hora_fim:
+      name: Ajudante Hora de Fim
+      description: "Auxiliar (input_datetime) para fim das notificações restritas."
+      selector:
+        entity:
+          domain: input_datetime
+    tempo_alerta:
+      name: Tempo de Tolerância Aberta
+      description: "Tempo máximo permitido antes de repetir o aviso."
+      default: 5
+      selector:
+        number:
+          min: 1
+          max: 60
+          unit_of_measurement: minutes
+          mode: box
+    coluna_som:
+      name: Coluna de Som (Altifalante)
+      description: "Coluna que vai ditar os avisos por voz (TTS)."
+      selector:
+        entity:
+          domain: media_player
+    lampada_aviso:
+      name: Lâmpada de Aviso
+      description: "Lâmpada que vai piscar em caso de alerta (Opcional)."
+      default: []
+      selector:
+        entity:
+          domain: light
+    cor_da_luz:
+      name: Cor da Luz (RGB)
+      description: "Escolha a cor para o piscar da lâmpada."
+      default:
+      selector:
+        color_rgb: {}
+
+# FIX CRÍTICO: Alterado para paralelo para que o fecho da porta seja instantâneo
+mode: parallel
+max: 20
+
+variables:
+  grupo_restrito: !input sensores_horario
+  tempo_alerta_var: !input tempo_alerta
+  ajudante_in: !input hora_inicio
+  ajudante_fi: !input hora_fim
+  coluna_var: !input coluna_som
+  luz_var: !input lampada_aviso
+  cor_var: !input cor_da_luz
+
+trigger:
+  - platform: state
+    entity_id: !input sensores_sempre
+    from: "off"
+    to: "on"
+    id: porta_aberta
+  - platform: state
+    entity_id: !input sensores_horario
+    from: "off"
+    to: "on"
+    id: porta_aberta
+  - platform: state
+    entity_id: !input sensores_sempre
+    from: "on"
+    to: "off"
+    id: porta_fechada
+  - platform: state
+    entity_id: !input sensores_horario
+    from: "on"
+    to: "off"
+    id: porta_fechada
+
+condition: []
+
+action:
+  # 1. Anúncio inicial imediato
+  - action: script.funcao_notificacao_de_voz_dinamica
+    data:
+      mensagem: >
+        {% if trigger.to_state is defined %}
+          {% set nome = trigger.to_state.name %}
+          {% if trigger.id == 'porta_aberta' %}
+            A {{ nome }} foi aberta.
+          {% else %}
+            A {{ nome }} foi fechada.
+          {% endif %}
+        {% else %}
+          Isto é um teste manual de voz.
+        {% endif %}
+      target_media_player: "{{ coluna_var }}"
+      target_luz: "{{ luz_var }}"
+      cor_luz: "{{ cor_var }}"
+      forcar_prioridade: "{{ trigger.entity_id not in grupo_restrito }}"
+      auxiliar_inicio: "{{ ajudante_in }}"
+      auxiliar_fim: "{{ ajudante_fi }}"
+
+  # 2. Monitorização do tempo aberta (Apenas se o gatilho atual for abertura)
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'porta_aberta' }}"
+        sequence:
+          - repeat:
+              while:
+                - condition: template
+                  value_template: "{{ is_state(trigger.entity_id, 'on') }}"
+              sequence:
+                - delay:
+                    minutes: "{{ tempo_alerta_var | int }}"
+                
+                - condition: template
+                  value_template: "{{ is_state(trigger.entity_id, 'on') }}"
+                
+                # Alerta persistente repetido
+                - action: script.funcao_notificacao_de_voz_dinamica
+                  data:
+                    mensagem: "Atenção. A {{ trigger.to_state.name }} continua aberta há mais de {{ tempo_alerta_var }} minutos."
+                    target_media_player: "{{ coluna_var }}"
+                    target_luz: "{{ luz_var }}"
+                    cor_luz: "{{ cor_var }}"
+                    forcar_prioridade: "{{ trigger.entity_id not in grupo_restrito }}"
+                    auxiliar_inicio: "{{ ajudante_in }}"
+                    auxiliar_fim: "{{ ajudante_fi }}"
