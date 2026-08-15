@@ -143,4 +143,3 @@ condition:
           forcar_prioridade: true
           auxiliar_inicio: "{{ states(ajudante_in) }}"
           auxiliar_fim: "{{ states(ajudante_fi) }}"
-
