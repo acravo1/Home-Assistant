@@ -1,0 +1,102 @@
+# ==============================================================================
+# TIPO DE ESTRUTURA: Blueprint / Modelo Reutilizável Dinâmico com Inputs de Utilizador
+# CATEGORIA: Manutenção e Telemetria de Hardware (Pilhas Sonoff Zigbee)
+# REUTILIZAÇÃO: Integrado com a Função de Notificação de Voz Dinâmica da Casa v2.4
+# ==============================================================================
+blueprint:
+  name: "Manutenção: Alerta Programável de Baterias Fracas via Central de Voz"
+  description: "Corre na programação escolhida pelo utilizador, analisa todos os sensores de bateria da casa e anuncia as pilhas críticas na coluna selecionada dinamicamente no painel geral."
+  domain: automation
+  input:
+    hora_aviso:
+      name: Hora do Alerta
+      description: "A hora do dia em que a automação vai verificar as pilhas."
+      default: "10:00:00"
+      selector:
+        time: {}
+    dias_semana:
+      name: Dias da Semana
+      description: "Selecione um ou múltiplos dias da semana para correr a verificação."
+      default: [7]
+      selector:
+        select:
+          multiple: true
+          custom_value: false
+          options:
+            - label: "Segunda-feira"
+              value: 1
+            - label: "Terça-feira"
+              value: 2
+            - label: "Quarta-feira"
+              value: 3
+            - label: "Quinta-feira"
+              value: 4
+            - label: "Sexta-feira"
+              value: 5
+            - label: "Sábado"
+              value: 6
+            - label: "Domingo"
+              value: 7
+    limiar_critico:
+      name: Limiar Crítico de Bateria (%)
+      description: "Notificar se a percentagem da pilha for inferior a este valor (Recomendado: 15%)."
+      default: 15
+      selector:
+        number:
+          min: 5
+          max: 30
+          step: 1
+          mode: slider
+          unit_of_measurement: "%"
+
+mode: single
+
+variables:
+  limiar_configurado: !input limiar_critico
+  dias_configurados: !input dias_semana
+
+trigger:
+  - platform: time
+    at: !input hora_aviso
+
+condition:
+  # Validação Híbrida Corrigida: Mapeia todos os itens recebidos para inteiro garantindo a correspondência matemática
+  - condition: template
+    value_template: "{{ now().isoweekday() | int in dias_configurados | map('int') | list }}"
+  
+  # Validação de Existência de Baterias utilizando filtro de segurança robusto para evitar quebras em Jinja2
+  - condition: template
+    value_template: >
+      {% set threshold = limiar_configurado | int %}
+      {{ states.sensor 
+         | selectattr('attributes.device_class', 'defined') 
+         | selectattr('attributes.device_class', 'eq', 'battery') 
+         | rejectattr('state', 'in', ['unavailable', 'unknown']) 
+
+         | map(attribute='state') | map('int', default=100) 
+         | select('lt', threshold) | list | length > 0 }}
+
+action:
+  # REUTILIZAÇÃO CRÍTICA: Encaminha a mensagem processada para o novo script dinâmico da casa
+  - action: script.funcao_notificacao_de_voz_dinamica
+    data:
+      mensagem: >
+        Aviso de manutenção doméstica. Foram detetadas pilhas com nível inferior a {{ limiar_configurado }} por cento nos seguintes equipamentos: 
+        {% set threshold = limiar_configurado | int %}
+        {% set ns = namespace(low_batteries=[]) %}
+        {% for s in states.sensor 
+           | selectattr('attributes.device_class', 'defined') 
+           | selectattr('attributes.device_class', 'eq', 'battery') 
+           | rejectattr('state', 'in', ['unavailable', 'unknown']) %}
+          {% if s.state | int(default=100) < threshold %}
+            {% set ns.low_batteries = ns.low_batteries + [s.name | replace(' Battery', '') | replace(' battery', '')] %}
+          {% endif %}
+        {% endfor %}
+        {{ ns.low_batteries | join(', ') }}. Por favor, providencie a substituição das pilhas correspondentes.
+      # Parâmetros padrão necessários para o teu script correr de forma limpa
+      target_media_player: media_player.avisos_sonoros
+      target_luz: none
+      cor_luz: [255, 120, 0] # Laranja para sinalizar aviso de manutenção técnica
+      forcar_prioridade: true # Força a passagem para que tu recebas o aviso visual fixo no canto inferior do menu
+      auxiliar_inicio: input_datetime.quiet_hours_start
+      auxiliar_fim: input_datetime.quiet_hours_end
