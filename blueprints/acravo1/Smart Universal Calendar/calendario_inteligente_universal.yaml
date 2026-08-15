@@ -1,0 +1,108 @@
+# ==============================================================================
+# TIPO DE ESTRUTURA: Blueprint / Modelo Reutilizável Dinâmico com Inputs
+# CATEGORIA: Agenda e Organização Familiar (Calendários)
+# REUTILIZAÇÃO: v1.1 - Totalmente Integrado com o Novo Script Central
+# ==============================================================================
+blueprint:
+  name: "Notificação Avançada de Calendário com Central de Voz"
+  description: "Anuncia eventos de um calendário específico com antecedência configurável, integrando luzes, cores e colunas dinâmicas."
+  domain: automation
+  input:
+    calendario_alvo:
+      name: Seleção do Calendário
+      description: "Escolha o calendário que pretende monitorizar."
+      selector:
+        entity:
+          domain: calendar
+    antecedencia_horas:
+      name: Antecedência do Alerta (Horas)
+      description: "Quantas horas antes do evento começar deve ser feito o aviso?"
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 24
+          unit_of_measurement: hours
+          mode: box
+    antecedencia_minutos:
+      name: Antecedência do Alerta (Minutos)
+      description: "Quantos minutos antes (adicionais às horas) deve ser feito o aviso?"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 59
+          unit_of_measurement: minutes
+          mode: box
+    coluna_som:
+      name: Coluna de Som (Altifalante)
+      description: "Selecione a coluna que vai ditar os avisos por voz (TTS)."
+      selector:
+        entity:
+          domain: media_player
+    lampada_aviso:
+      name: Lâmpada de Aviso
+      description: "Selecione a lâmpada que vai piscar in caso de alerta (Opcional)."
+      default: []
+      selector:
+        entity:
+          domain: light
+    cor_da_luz:
+      name: Cor da Luz (RGB)
+      description: "Escolha a cor para o piscar da lâmpada (Permite diferenciar os calendários)."
+      default: [0, 255, 0]
+      selector:
+        color_rgb: {}
+    forcar_prioridade_calendario:
+      name: Forçar Prioridade Máxima
+      description: "Ative se quiser que este calendário avise mesmo durante o horário de silêncio."
+      default: false
+      selector:
+        boolean: {}
+    hora_inicio:
+      name: Ajudante Hora de Início
+      description: "Auxiliar (input_datetime) para início do período permitido (se não prioritário)."
+      selector:
+        entity:
+          domain: input_datetime
+    hora_fim:
+      name: Ajudante Hora de Fim
+      description: "Auxiliar (input_datetime) para fim do período permitido (se não prioritário)."
+      selector:
+        entity:
+          domain: input_datetime
+
+mode: queued
+max: 10
+
+variables:
+  coluna_var: !input coluna_som
+  luz_var: !input lampada_aviso
+  cor_var: !input cor_da_luz
+  prio_var: !input forcar_prioridade_calendario
+  ajudante_in: !input hora_inicio
+  ajudante_fi: !input hora_fim
+
+trigger:
+  - trigger: calendar.event_started
+    target:
+      entity_id: !input calendario_alvo
+    options:
+      offset:
+        hours: !input antecedencia_horas
+        minutes: !input antecedencia_minutos
+      offset_type: before
+
+condition: []
+
+action:
+  - action: script.funcao_notificacao_de_voz_dinamica
+    data:
+      mensagem: >-
+        Lembrete de agenda. Daqui a pouco vai iniciar o evento: {{ trigger.calendar_event.summary }}.
+      target_media_player: "{{ coluna_var }}"
+      target_luz: "{{ luz_var }}"
+      cor_luz: "{{ cor_var }}"
+      forcar_prioridade: "{{ prio_var }}"
+      auxiliar_inicio: "{{ ajudante_in }}"
+      auxiliar_fim: "{{ ajudante_fi }}"
