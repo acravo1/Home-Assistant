@@ -1,0 +1,181 @@
+# ==============================================================================
+# TIPO DE ESTRUTURA: Blueprint / Modelo Reutilizável Dinâmico com Inputs de Utilizador
+# CATEGORIA: Climatização e Conforto (Controlo de Humidade e Desumidificador)
+# REUTILIZAÇÃO: v1.1 - Fusão de Ligar/Desligar com Notificação Inteligente Central
+# ==============================================================================
+blueprint:
+  name: "Climatização: Gestão Inteligente de Desumidificador"
+  description: "Controla a ativação e desativação do desumidificador com base em humidade, porta aberta, botão físico e horários."
+  domain: automation
+  input:
+    desumidificador_switch:
+      name: Tomada/Switch do Desumidificador
+      selector:
+        entity:
+          domain: switch
+    sensor_humidade:
+      name: Sensor de Humidade
+      selector:
+        entity:
+          domain: sensor
+          device_class: humidity
+    ajudante_limite_humidade:
+      name: Ajudante Limite de Humidade
+      description: "Auxiliar (input_number) que define a meta de humidade desejada."
+      selector:
+        entity:
+          domain: input_number
+    sensor_porta:
+      name: Sensor de Porta/Janela da Divisão
+      description: "Desliga o equipamento se a porta abrir para evitar desperdício."
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: door
+    botao_fisico:
+      name: Botão Sem Fios (Clique Manual)
+      description: "Entidade de evento do botão para controlo manual (ex: Botão 4)."
+      selector:
+        entity:
+          domain: event
+    # --- Parâmetros de Notificação e Horários ---
+    coluna_som:
+      name: Coluna de Som (Altifalante)
+      selector:
+        entity:
+          domain: media_player
+    lampada_aviso:
+      name: Lâmpada de Aviso (Opcional)
+      default: []
+      selector:
+        entity:
+          domain: light
+    cor_da_luz:
+      name: Cor da Luz (RGB)
+      description: "Escolha a cor para o piscar da lâmpada (Defeito: Azul)."
+      default:
+      selector:
+        color_rgb: {}
+    hora_inicio:
+      name: Ajudante Silêncio - Início
+      description: "Auxiliar (input_datetime) para o início do período de notificações de voz."
+      selector:
+        entity:
+          domain: input_datetime
+    hora_fim:
+      name: Ajudante Silêncio - Fim
+      description: "Auxiliar (input_datetime) para o fim do período de notificações de voz."
+      selector:
+        entity:
+          domain: input_datetime
+
+mode: queued
+max: 10
+
+variables:
+  switch_dev: !input desumidificador_switch
+  sensor_p: !input sensor_porta
+  limite_h: !input ajudante_limite_humidade
+  coluna_var: !input coluna_som
+  luz_var: !input lampada_aviso
+  cor_var: !input cor_da_luz
+  ajudante_in: !input hora_inicio
+  ajudante_fi: !input hora_fim
+
+trigger:
+  # Triggers para LIGAR ou DESLIGAR por Humidade
+  - platform: numeric_state
+    entity_id: !input sensor_humidade
+    above: !input ajudante_limite_humidade
+    id: humidade_alta
+  - platform: numeric_state
+    entity_id: !input sensor_humidade
+    below: !input ajudante_limite_humidade
+    id: humidade_baixa
+  # Trigger de Segurança: Porta aberta por mais de 15 segundos
+  - platform: state
+    entity_id: !input sensor_porta
+    to: "on"
+    for:
+      seconds: 15
+    id: porta_aberta
+  # Trigger Horário: Fim das horas de silêncio (pode ligar se precisar)
+  - platform: time
+    at: !input hora_fim
+    id: fim_silencio
+  # Trigger Manual: Clique no botão físico (Plataforma baseada em Eventos)
+  - platform: event
+    event_type: state_changed
+    event_data:
+      entity_id: !input botao_fisico
+    id: clique_botao
+
+condition: []
+
+action:
+  - choose:
+      # ========================================================================
+      # CENÁRIO A: LÓGICA PARA LIGAR
+      # ========================================================================
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ (trigger.id == 'humidade_alta' or trigger.id == 'fim_silencio') or 
+                 (trigger.id == 'clique_botao' and is_state(switch_dev, 'off')) }}
+          - condition: state
+            entity_id: !input desumidificador_switch
+            state: "off"
+          - condition: state
+            entity_id: !input sensor_porta
+            state: "off"
+          - condition: numeric_state
+            entity_id: !input sensor_humidade
+            above: !input ajudante_limite_humidade
+          - condition: time
+            after: !input hora_inicio
+            before: !input hora_fim
+        sequence:
+          - action: switch.turn_on
+            target:
+              entity_id: "{{ switch_dev }}"
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: "O desumidificador da cozinha foi ligado."
+              target_media_player: "{{ coluna_var }}"
+              target_luz: "{{ luz_var }}"
+              cor_luz: "{{ cor_var }}"
+              forcar_prioridade: false
+              auxiliar_inicio: "{{ ajudante_in }}"
+              auxiliar_fim: "{{ ajudante_fi }}"
+
+      # ========================================================================
+      # CENÁRIO B: LÓGICA PARA DESLIGAR
+      # ========================================================================
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ trigger.id == 'humidade_baixa' or trigger.id == 'porta_aberta' or 
+                 (trigger.id == 'clique_botao' and is_state(switch_dev, 'on')) }}
+          - condition: state
+            entity_id: !input desumidificador_switch
+            state: "on"
+        sequence:
+          - action: switch.turn_off
+            target:
+              entity_id: "{{ switch_dev }}"
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: >-
+                {% if trigger.id == 'porta_aberta' %}
+                  O desumidificador da cozinha foi desligado porque a porta foi aberta.
+                {% elif trigger.id == 'humidade_baixa' %}
+                  O desumidificador da cozinha foi desligado. A humidade atingiu o nível ideal.
+                {% else %}
+                  O desumidificador da cozinha foi desligado manualmente.
+                {% endif %}
+              target_media_player: "{{ coluna_var }}"
+              target_luz: "{{ luz_var }}"
+              cor_luz: "{{ cor_var }}"
+              forcar_prioridade: false
+              auxiliar_inicio: "{{ ajudante_in }}"
+              auxiliar_fim: "{{ ajudante_fi }}"
