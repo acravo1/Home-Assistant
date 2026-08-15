@@ -1,0 +1,145 @@
+blueprint:
+  name: Automacao de Rega Otimizada com Cooldown Nativo e Interrupcao Manual
+  description: Controla a rega em dois ciclos com pausa para absorção. Interrompe imediatamente se o utilizador desligar a rega manualmente e possui salvaguarda de gatilho periódico.
+  domain: automation
+  input:
+    sector_name:
+      name: Nome do Setor
+      selector:
+        text:
+    soil_moisture_sensor:
+      name: Sensor de Humidade do Solo
+      selector:
+        entity:
+          domain: sensor
+    moisture_limit:
+      name: Humidade Ideal do Setor
+      selector:
+        entity:
+          domain: input_number
+    watering_duration:
+      name: Tempo Total de Rega (Minutos)
+      selector:
+        entity:
+          domain: input_number
+    cooldown_duration:
+      name: Tempo de Resguardo (Minutos)
+      selector:
+        entity:
+          domain: input_number
+    watering_switch:
+      name: Interruptor da Rega
+      selector:
+        entity:
+          domain: switch
+    soak_duration_minutes:
+      name: Tempo de Pausa para Absorcao
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 60
+          unit_of_measurement: min
+          mode: box
+    quiet_hours_start:
+      name: Inicio Horario TTS
+      selector:
+        entity:
+          domain: input_datetime
+    quiet_hours_end:
+      name: Fim Horario TTS
+      selector:
+        entity:
+          domain: input_datetime
+
+mode: single
+
+variables:
+  sector: !input sector_name
+  soil_sensor_var: !input soil_moisture_sensor
+  ideal_limit_var: !input moisture_limit
+  w_duration_entity: !input watering_duration
+  c_duration_entity: !input cooldown_duration
+  switch_target: !input watering_switch
+  ajudante_in: !input quiet_hours_start
+  ajudante_fi: !input quiet_hours_end
+
+trigger:
+  # Gatilho 1: Dispara no instante em que o sensor cruza a linha limite para baixo
+  - platform: template
+    id: humidade_baixa
+    value_template: >-
+      {{ states(soil_sensor_var) | float(0) < states(ideal_limit_var) | float(0) }}
+  
+  # Gatilho 2: Salvaguarda periódica caso o gatilho principal ocorra durante o Cooldown
+  - platform: time_pattern
+    minutes: "/15"
+    id: verificacao_periodica
+
+condition:
+  # Condição 1: Garante o cumprimento estrito do Tempo de Resguardo (Cooldown)
+  - condition: template
+    value_template: >-
+      {{ this.attributes.last_triggered is none or 
+         (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) > (states(c_duration_entity) | int(0) * 60) }}
+  
+  # Condição 2: Garante que a verificação dos 15 minutos só avança se a humidade continuar de facto abaixo do ideal
+  - condition: template
+    value_template: >-
+      {{ states(soil_sensor_var) | float(0) -
+              {{ states(soil_sensor_var) | float(0) < states(ideal_limit_var) | float(0) }}
+          - condition: template
+            value_template: "{{ is_state(switch_target, 'off') }}"
+        sequence:
+          # --- CICLO 2 ---
+          - action: switch.turn_on
+            target:
+              entity_id: !input watering_switch
+
+          # Monitorização ativa de interrupção no Ciclo 2
+          - wait_for_trigger:
+              - platform: state
+                entity_id: !input watering_switch
+                to: "off"
+            timeout:
+              minutes: "{{ ((states(w_duration_entity) | float(0)) / 2) | int(0) }}"
+            continue_on_timeout: true
+
+          # Desliga fisicamente o equipamento
+          - action: switch.turn_off
+            target:
+              entity_id: !input watering_switch
+          - delay: "00:00:02"
+          - action: switch.turn_off
+            target:
+              entity_id: !input watering_switch
+
+          # Determina se a paragem ocorreu por fim do tempo ou por ação manual
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ wait.trigger is none }}"
+                sequence:
+                  - action: script.funcao_notificacao_de_voz_dinamica
+                    data:
+                      mensagem: "O ciclo completo de rega do setor {{ sector }} foi concluído."
+                      target_media_player: media_player.avisos_sonoros
+                      forcar_prioridade: false
+                      auxiliar_inicio: "{{ states(ajudante_in) }}"
+                      auxiliar_fim: "{{ states(ajudante_fi) }}"
+            default:
+              - action: script.funcao_notificacao_de_voz_dinamica
+                data:
+                  mensagem: "Rega cancelada manualmente pelo utilizador no setor {{ sector }} durante o segundo ciclo."
+                  target_media_player: media_player.avisos_sonoros
+                  forcar_prioridade: true
+                  auxiliar_inicio: "{{ states(ajudante_in) }}"
+                  auxiliar_fim: "{{ states(ajudante_fi) }}"
+    default:
+      - action: script.funcao_notificacao_de_voz_dinamica
+        data:
+          mensagem: "Rega interrompida no setor {{ sector }}. O solo atingiu o limite de segurança para absorção ou foi parada manualmente."
+          target_media_player: media_player.avisos_sonoros
+          forcar_prioridade: true
+          auxiliar_inicio: "{{ states(ajudante_in) }}"
+          auxiliar_fim: "{{ states(ajudante_fi) }}"
