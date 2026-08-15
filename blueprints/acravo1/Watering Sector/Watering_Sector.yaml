@@ -70,7 +70,7 @@ trigger:
     id: humidade_baixa
     value_template: >-
       {{ states(soil_sensor_var) | float(0) < states(ideal_limit_var) | float(0) }}
-  
+
   # Gatilho 2: Salvaguarda periódica caso o gatilho principal ocorra durante o Cooldown
   - platform: time_pattern
     minutes: "/15"
@@ -80,66 +80,62 @@ condition:
   # Condição 1: Garante o cumprimento estrito do Tempo de Resguardo (Cooldown)
   - condition: template
     value_template: >-
-      {{ this.attributes.last_triggered is none or 
-         (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) > (states(c_duration_entity) | int(0) * 60) }}
+      {{ this.attributes.last_triggered is none or
+      (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) > (states(c_duration_entity) | int(0) * 60) }}
   
   # Condição 2: Garante que a verificação dos 15 minutos só avança se a humidade continuar de facto abaixo do ideal
   - condition: template
     value_template: >-
-      {{ states(soil_sensor_var) | float(0) -
-              {{ states(soil_sensor_var) | float(0) < states(ideal_limit_var) | float(0) }}
-          - condition: template
-            value_template: "{{ is_state(switch_target, 'off') }}"
+      {{ states(soil_sensor_var) | float(0) = states(ideal_limit_var) | float(0) }}"
         sequence:
-          # --- CICLO 2 ---
-          - action: switch.turn_on
-            target:
-              entity_id: !input watering_switch
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: "O setor {{ sector }} atingiu o limite de humidade ideal após o primeiro ciclo. Segundo ciclo abortado por segurança."
+              target_media_player: media_player.avisos_sonoros
+              forcar_priority: false
+              auxiliar_inicio: "{{ states(ajudante_in) }}"
+              auxiliar_fim: "{{ states(ajudante_fi) }}"
+          - stop: "Humidade ideal restabelecida após Ciclo 1"
 
-          # Monitorização ativa de interrupção no Ciclo 2
-          - wait_for_trigger:
-              - platform: state
-                entity_id: !input watering_switch
-                to: "off"
-            timeout:
-              minutes: "{{ ((states(w_duration_entity) | float(0)) / 2) | int(0) }}"
-            continue_on_timeout: true
+  # =======================================================================================
+  # --- CICLO 2 DE REGA ---
+  # =======================================================================================
+  - action: switch.turn_on
+    target:
+      entity_id: !input watering_switch
 
-          # Desliga fisicamente o equipamento
-          - action: switch.turn_off
-            target:
-              entity_id: !input watering_switch
-          - delay: "00:00:02"
-          - action: switch.turn_off
-            target:
-              entity_id: !input watering_switch
+  # Monitorização ativa de interrupção no Ciclo 2
+  - wait_for_trigger:
+      - platform: state
+        entity_id: !input watering_switch
+        to: "off"
+    timeout:
+      minutes: "{{ ((states(w_duration_entity) | float(0)) / 2) | int(0) }}"
+    continue_on_timeout: true
 
-          # Determina se a paragem ocorreu por fim do tempo ou por ação manual
-          - choose:
-              - conditions:
-                  - condition: template
-                    value_template: "{{ wait.trigger is none }}"
-                sequence:
-                  - action: script.funcao_notificacao_de_voz_dinamica
-                    data:
-                      mensagem: "O ciclo completo de rega do setor {{ sector }} foi concluído."
-                      target_media_player: media_player.avisos_sonoros
-                      forcar_prioridade: false
-                      auxiliar_inicio: "{{ states(ajudante_in) }}"
-                      auxiliar_fim: "{{ states(ajudante_fi) }}"
-            default:
-              - action: script.funcao_notificacao_de_voz_dinamica
-                data:
-                  mensagem: "Rega cancelada manualmente pelo utilizador no setor {{ sector }} durante o segundo ciclo."
-                  target_media_player: media_player.avisos_sonoros
-                  forcar_prioridade: true
-                  auxiliar_inicio: "{{ states(ajudante_in) }}"
-                  auxiliar_fim: "{{ states(ajudante_fi) }}"
-    default:
-      - action: script.funcao_notificacao_de_voz_dinamica
-        data:
-          mensagem: "Rega interrompida no setor {{ sector }}. O solo atingiu o limite de segurança para absorção ou foi parada manualmente."
-          target_media_player: media_player.avisos_sonoros
-          forcar_prioridade: true
-          auxiliar_inicio: "{{ states(ajudante_in) }}"
-          auxiliar_fim: "{{ states(ajudante_fi) }}"
+  # Desliga fisicamente o equipamento no fim da automação
+  - action: switch.turn_off
+    target:
+      entity_id: !input watering_switch
+
+  # Determina se a paragem do Ciclo 2 ocorreu por fim do tempo ou por ação manual
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ wait.trigger is none }}"
+        sequence:
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: "O ciclo completo de rega do setor {{ sector }} foi concluído com sucesso."
+              target_media_player: media_player.avisos_sonoros
+              forcar_priority: false
+              auxiliar_inicio: "{{ states(ajudante_in) }}"
+              auxiliar_fim: "{{ states(ajudante_fi) }}"
+      default:
+        - action: script.funcao_notificacao_de_voz_dinamica
+          data:
+            mensagem: "Rega cancelada manualmente pelo utilizador no setor {{ sector }} durante o segundo ciclo."
+            target_media_player: media_player.avisos_sonoros
+            forcar_priority: true
+            auxiliar_inicio: "{{ states(ajudante_in) }}"
+            auxiliar_fim: "{{ states(ajudante_fi) }}"
