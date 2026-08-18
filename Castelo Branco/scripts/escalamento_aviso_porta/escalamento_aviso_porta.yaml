@@ -1,0 +1,71 @@
+# =========================================================================================
+# HOME ASSISTANT - SCRIPT: escalamento_aviso_porta.yaml (Motor Centralizado)
+# =========================================================================================
+escalamento_aviso_porta:
+  alias: "Motor de Escalamento e Alarme de Portas Abertas"
+  description: "Trata da lógica de ciclos de 5 minutos e alarmes múltiplos ao 10º minuto para qualquer entidade."
+  fields:
+    target_sensor:
+      name: Sensor Alvo
+      description: "O binary_sensor que disparou o aviso (ex: binary_sensor.sensor_porta_principal)"
+      required: true
+      selector:
+        entity:
+          domain: binary_sensor
+    nome_zona:
+      name: Nome da Zona
+      description: "O nome em texto limpo para o TTS falar (ex: Porta Principal)"
+      required: true
+      selector:
+        text:
+
+  # 🔒 MODO RESTART: Se a porta for fechada e reaberta rapidamente, o script cancela
+  # o ciclo anterior e reinicia o cronómetro do zero de forma sádia!
+  mode: restart
+
+  sequence:
+    # --- ETAPA 1: Aguardar os primeiros 5 minutos ---
+    - delay:
+        minutes: 5
+
+    # Validar se a porta continua aberta após os 5 minutos
+    - condition: template
+      value_template: "{{ is_state(target_sensor, 'on') }}"
+
+    # Primeiro Aviso Suave (Apenas se o Alarmo NÃO estiver desarmado, conforme definiste)
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ not is_state('alarm_control_panel.alarmo', 'disarmed') }}"
+          sequence:
+            - action: script.funcao_notificacao_de_voz_dinamica
+              data:
+                mensagem: "Atenção, a {{ nome_zona }} encontra-se aberta há cinco minutos."
+                target_media_player: media_player.avisos_sonoros
+                forcar_priority: false
+
+    # --- ETAPA 2: Aguardar mais 5 minutos (Totalizando 10 minutos) ---
+    - delay:
+        minutes: 5
+
+    # --- ETAPA 3: ENTRAR EM MODO DE ALARME MÚLTIPLO (Loop de 1 em 1 minuto) ---
+    - repeat:
+        while:
+          # O loop corre indefinidamente ENQUANTO a porta se mantiver aberta ('on')
+          - condition: template
+            value_template: "{{ is_state(target_sensor, 'on') }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ not is_state('alarm_control_panel.alarmo', 'disarmed') }}"
+                sequence:
+                  - action: script.funcao_notificacao_de_voz_dinamica
+                    data:
+                      mensagem: "ALERTA CRÍTICO! A {{ nome_zona }} está aberta há mais de dez minutos! Por favor, feche a porta!"
+                      target_media_player: media_player.avisos_sonoros
+                      forcar_priority: true # Força o volume máximo nas colunas
+
+          # Intervalo de repetição entre os alarmes múltiplos do décimo minuto
+          - delay:
+              minutes: 1
