@@ -1,0 +1,250 @@
+views:
+  - type: sections
+    sections:
+      - type: grid
+        cards:
+          - square: true
+            type: grid
+            cards:
+              - type: horizontal-stack
+                grid_options:
+                  columns: full
+                  column_span: 4
+                cards:
+                  - type: custom:config-template-card
+                    entities:
+                      - input_number.humidade_ideal_ne
+                      - sensor.smart_soil_tester_ne_humidade
+                    variables:
+                      hi: states['input_number.humidade_ideal_ne'].state
+                    card:
+                      title: 📐 SECÇÃO NE
+                      description: Perfil Dinâmico de Cultivo
+                      type: vertical-stack
+                      cards:
+                        - type: custom:modern-circular-gauge
+                          entity: sensor.smart_soil_tester_ne_humidade
+                          title: Nordeste
+                          show_gauge: outer
+                          header_position: top
+                          needle: true
+                          start_from_zero: false
+                          show_state: true
+                          show_unit: true
+                          smooth_segments: true
+                          adaptive_state_color: true
+                          show_header: false
+                          show_icon: true
+                          adaptive_icon_color: true
+                          gauge_type: half
+                          gauge_foreground_style:
+                            width: 8
+                            opacity: 0
+                            color: blue
+                          gauge_background_style:
+                            opacity: 0.27
+                            width: 10
+                          gauge_radius: 40
+                          adaptive_label_color: true
+                          secondary:
+                            entity: input_number.humidade_ideal_ne
+                            unit: '%'
+                            state_size: small
+                          icon: >-
+                            {% set var =
+                            states('sensor.jardim_ne_smart_soil_tester_ne_variacao_humidade_ne')
+                            | float(0) %} {% if var > 2.0 %}
+                              mdi:chevron-up-circle
+                            {% elif var < -2.0 %}
+                              mdi:chevron-down-circle
+                            {% else %}
+                              mdi:chevron-right-circle
+                            {% endif %}      unit: '%'
+                          tertiary:
+                            entity: >-
+                              sensor.jardim_ne_smart_soil_tester_ne_variacao_humidade_ne
+                          segments:
+                            - from: 0
+                              color:
+                                - 255
+                                - 0
+                                - 0
+                            - from: ${hi * 0.60}
+                              color:
+                                - 255
+                                - 255
+                                - 0
+                            - from: ${hi * 0.80}
+                              color:
+                                - 0
+                                - 255
+                                - 0
+                            - from: ${hi * 1.21}
+                              color:
+                                - 255
+                                - 255
+                                - 0
+                            - from: ${hi * 1.41}
+                              color:
+                                - 255
+                                - 0
+                                - 0
+                        - type: entities
+                          entities:
+                            - entity: input_select.perfil_planta_ne
+                              name: Tipo
+                            - entity: switch.4_433_interruptor_4
+                              name: Rega
+                        - type: history-graph
+                          entities:
+                            - entity: switch.4_433_interruptor_4
+                          hours_to_show: 24
+                  - type: custom:config-template-card
+                    entities:
+                      - input_number.humidade_ideal_se
+                      - sensor.smart_soil_tester_se_humidade
+                    variables:
+                      hi: states['input_number.humidade_ideal_se'].state
+                    card:
+                      type: vertical-stack
+                      title: 📐 SECÇÃO SE
+                      description: Perfil Dinâmico de Cultivo
+                      cards:
+                        - type: custom:modern-circular-gauge
+                          entity: sensor.smart_soil_tester_se_humidade
+                          title: Sudeste
+                          show_gauge: outer
+                          unit: '%'
+                          header_position: top
+                          needle: true
+                          start_from_zero: false
+                          show_state: true
+                          show_unit: true
+                          smooth_segments: true
+                          adaptive_state_color: true
+                          show_header: false
+                          show_icon: true
+                          adaptive_icon_color: true
+                          gauge_type: half
+                          gauge_foreground_style:
+                            width: 8
+                            opacity: 0
+                            color: blue
+                          gauge_background_style:
+                            opacity: 0.27
+                            width: 10
+                          gauge_radius: 40
+                          adaptive_label_color: true
+                          secondary:
+                            entity: input_number.humidade_ideal_se
+                            unit: '%'
+                            state_size: small
+                          icon: >-
+                            {% set var =
+                            states('sensor.jardim_se_smart_soil_tester_se_variacao_humidade_se')
+                            | float(0) %} {% if var > 2.0 %}
+                              mdi:chevron-up-circle
+                            {% elif var < -2.0 %}
+                              mdi:chevron-down-circle
+                            {% else %}
+                              mdi:chevron-right-circle
+                            {% endif %}      unit: '%'
+                          tertiary:
+                            entity: >-
+                              sensor.jardim_se_smart_soil_tester_se_variacao_humidade_se
+                          segments:
+                            - from: 0
+                              color:
+                                - 255
+                                - 0
+                                - 0
+                            - from: ${hi * 0.60}
+                              color:
+                                - 255
+                                - 255
+                                - 0
+                            - from: ${hi * 0.80}
+                              color:
+                                - 0
+                                - 255
+                                - 0
+                            - from: ${hi * 1.21}
+                              color:
+                                - 255
+                                - 255
+                                - 0
+                            - from: ${hi * 1.41}
+                              color:
+                                - 255
+                                - 0
+                                - 0
+                        - type: entities
+                          entities:
+                            - entity: input_select.perfil_planta_se
+                              name: Tipo
+                            - entity: switch.4_433_interruptor_3
+                              name: Rega
+                        - type: history-graph
+                          entities:
+                            - entity: switch.4_433_interruptor_3
+                          hours_to_show: 24
+            columns: 1
+            grid_options:
+              columns: 16
+              rows: auto
+          - type: vertical-stack
+            cards:
+              - type: markdown
+                content: >-
+                  | Perfil | Alvo | Rega (80%) | Excesso (120%) | Exemplos |
+
+                  | :--- | :---: | :---: | :---: | :--- |
+
+                  | **Seco** | **20%** | **16%** | **24%** | Alecrim, Tomilho,
+                  Cactos |
+
+                  | **Médio** | **35%** | **28%** | **42%** | Salsa, Coentros,
+                  Orégãos |
+
+                  | **Húmido** | **50%** | **40%** | **60%** | Manjericão,
+                  Hortelã |
+
+
+                  ***
+
+
+                  💡 **Nota de Segurança:** A automação intermédia de dupla
+                  validação monitoriza o solo após o primeiro ciclo. Se o
+                  canteiro ultrapassar os **120% do Alvo** durante a pausa de
+                  absorção, o segundo ciclo é cancelado para evitar asfixia
+                  radicular.
+
+
+                  🔴 Zona Vermelha Inferior (Seca Crítica): Abaixo de 60% da
+                  humidade ideal. A planta corre risco imediato de desidratação
+                  e murchamento.
+
+
+                  🟡 Zona Amarela Inferior (Alerta de Seca): De 60% a 79% da
+                  humidade ideal. O solo está a ficar demasiado seco; precisa de
+                  rega em breve.
+
+
+                  🟢 Zona Verde (Ideal): De 80% a 120% da humidade ideal. O
+                  balanço perfeito de água e oxigénio para as raízes.
+
+
+                  🟡 Zona Amarela Superior (Alerta de Excesso): De 121% a 140%
+                  da humidade ideal. O solo está muito saturado; deve suspender
+                  as regas.
+
+
+                  🔴 Zona Vermelha Superior (Encharcamento Crítico): Acima de
+                  140% da humidade ideal. Risco elevado de asfixia radicular e
+                  podridão das raízes por fungos.
+                title: '🌿 Tabela de Humidade por Perfil:'
+            grid_options:
+              columns: 20
+              rows: auto
+        column_span: 4
+    badges: []
