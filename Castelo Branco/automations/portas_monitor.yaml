@@ -1,0 +1,14 @@
+id: portas_monitor_geral
+alias: "Segurança: Monitor de Abertura de Portas"
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.sensor_porta_principal
+      - binary_sensor.sensor_portao_garagem
+    to: "on"
+action:
+  - action: script.escalamento_aviso_porta
+    data:
+      target_sensor: "{{ trigger.entity_id }}"
+      nome_zona: >-
+        {{ 'Porta Principal' if trigger.entity_id == 'binary_sensor.sensor_porta_principal' else 'Garagem' }}
