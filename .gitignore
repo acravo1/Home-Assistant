@@ -1,0 +1,101 @@
+# Home Assistant Configuration - Security & Build Artifacts
+
+# ⚠️ SENSITIVE FILES - MUST NOT BE COMMITTED
+secrets.yaml
+secrets.yml
+
+# 📱 Home Assistant Generated Files
+.storage/
+.cloud/
+.HA_VERSION
+automations.yaml
+scripts.yaml
+scenes.yaml
+groups.yaml
+known_devices.yaml
+.component_store
+
+# 🔌 ESPHome Build & Cache
+.esphome/
+build/
+*.bin
+*.elf
+
+# 🐍 Python Cache & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 🖥️ IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-project
+*.sublime-workspace
+.editorconfig
+
+# 📦 OS Specific
+Thumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+*.icloud
+
+# 🔐 Database Files (if locally stored)
+*.db
+*.sqlite
+*.sqlite3
+
+# 📊 Backups & Temporary
+*.bak
+*.backup
+*.tmp
+*.log
+*.swp
+temp/
+tmp/
+
+# 🌐 Node Modules (if using node-based tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# 🔧 Misc Build & CI Files
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# 📝 Development
+.env
+.env.local
+config_check_results.json
