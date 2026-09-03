@@ -1,0 +1,2739 @@
+﻿================================================================================
+Repository Export
+================================================================================
+
+Repository : Home-Assistant
+Date       : 2026-09-03 17:18:45
+Root       : C:\Users\silva\OneDrive\GitHub\Home-Assistant
+
+
+================================================================================
+FILE: README.md
+================================================================================
+
+# Home Assistant Configuration & Automation
+
+Repositório pessoal com as configurações, automações, guiões e integrações para o **Home Assistant**.
+
+---
+
+## 📋 Sobre o Projeto
+
+Este repositório serve como ponto central de controlo, salvaguarda e documentação da minha instância do **Home Assistant**. Inclui ficheiros de configuração, integrações personalizadas, scripts de automação, definições para nós IoT (ex.: **ESPHome / ESP32 / Arduino**) e visões para os painéis de controlo (Lovelace).
+
+---
+
+## 🗂️ Estrutura do Repositório
+
+```text
+.
+├── automations.yaml     # Regras de automação e gatilhos da casa
+├── scripts.yaml         # Sequências de ações e rotinas personalizadas
+├── scenes.yaml          # Cenas pré-configuradas (iluminação, ambientes)
+├── configuration.yaml   # Configuração principal do Home Assistant
+├── esphome/             # Ficheiros de configuração YAML para nós ESP32/ESP8266
+├── custom_components/   # Componentes e integrações personalizadas (HACS)
+└── README.md            # Documentação do repositório
+```
+
+---
+
+## 🛠️ Tecnologias e Ecossistema
+
+- **Core:** [Home Assistant](https://www.home-assistant.io/)
+- **Microcontroladores:** ESP32, ESP8266 (através de [ESPHome](https://esphome.io/))
+- **Protocolos & Comunicação:** MQTT, Zigbee, Wi-Fi, I2C, Modbus
+- **Gestão de Componentes:** [HACS](https://hacs.xyz/) (Home Assistant Community Store)
+
+---
+
+## 🚀 Como Utilizar
+
+1. **Clonar o Repositório:**
+   ```bash
+   git clone https://github.com/acravo1/Home-Assistant.git
+   ```
+
+2. **Ajustes de Segurança:**
+   - Crie o seu próprio ficheiro `secrets.yaml` (não incluído por razões de segurança) para armazenar credenciais, chaves de API, palavras-passe e redes Wi-Fi.
+   - Atualize as referências `!secret` no ficheiro `configuration.yaml`.
+
+3. **Validar e Aplicar:**
+   - Valide a configuração no Home Assistant (*Ferramentas do Desenvolvedor > YAML > Verificar Configuração*).
+   - Recarregue ou reinicie a instância do Home Assistant.
+
+---
+
+## 🔒 Segurança
+
+> ⚠️ **Nota Importante:** Nunca partilhe publicamente o seu ficheiro `secrets.yaml`, tokens de acesso ou senhas de rede no GitHub. Utilize o `.gitignore` para prevenir o envio inadvertido de dados sensíveis.
+
+---
+
+## 🤝 Contribuições e Feedback
+
+Anotações, sugestões de melhoria nas automações ou otimizações no código YAML são sempre bem-vindas. Sinta-se à vontade para abrir uma *Issue* ou enviar um *Pull Request*.
+README.md
+A apresentar README.md
+
+
+================================================================================
+FILE: Castelo Branco\README.md
+================================================================================
+
+# 🏰 Castelo Branco - Home Assistant Automation Center
+
+Central de automação inteligente e gestão para habitação em **Castelo Branco**, implementada com **Home Assistant**.
+
+## 📋 Descrição Geral
+
+Este módulo contém toda a configuração, automações avançadas, blueprints reutilizáveis e scripts personalizados para o sistema domotização de Castelo Branco. Inclui soluções para rega inteligente, segurança, notificações, monitorização de baterias e muito mais.
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+Castelo Branco/
+├── README.md                          # Este ficheiro - Documentação principal
+├── automations/                       # Automações da casa
+│   └── portas_monitor.yaml            # Monitor de abertura de portas e garagem
+├── blueprints/                        # Blueprints reutilizáveis para Home Assistant
+│   ├── README.md                      # Lista completa de blueprints disponíveis
+│   ├── aviso_acessos_universal/       # Blueprint para avisos de acessos
+│   ├── battery_alerts/                # Blueprint para alertas de bateria baixa
+│   ├── smart_dumb_dehumidifier/       # Blueprint para controlo inteligente de desumidificador
+│   ├── smart_snailmail_box/           # Blueprint para caixa inteligente de correio
+│   ├── smart_universal_calendar/      # Blueprint para calendário inteligente universal
+│   └── watering_sector/               # Blueprint para rega otimizada por setores
+├── scripts/                           # Scripts e rotinas personalizadas
+│   ├── README.md                      # Lista de scripts disponíveis
+│   ├── dynamic_notifications/         # Script de notificações dinâmicas com TTS
+│   └── escalamento_aviso_porta/       # Script de escalamento de avisos de porta
+├── views/                             # Visões do dashboard Lovelace
+│   └── SistemaDeRega.yaml             # Dashboard de sistema de rega
+└── manuais/                           # Documentação técnica e manuais
+    ├── Manual_Nextcloud_Talk.md
+    ├── Manual_Nextcloud_OnlyOffice.md
+    ├── Manual_Paperless_NGX.md
+    ├── Manual_Utilizacao_Familia.md
+    ├── Plano_de_Emergencia_Familiar.md
+    └── README.md                      # Índice de manuais
+```
+
+---
+
+## 🚀 Funcionalidades Principais
+
+### 🚪 Segurança & Monitorização
+- **Monitor de Portas:** Detecção de abertura/fecho de portas principais e garagem
+- **Escalamento de Avisos:** Sistema em cascata para avisos críticos
+
+### 💧 Rega Inteligente
+- **Rega Fracionada:** Sistema de 2 ciclos com pausa de absorção
+- **Sensor de Humidade:** Controlo automático por nível de humidade
+- **Interrupção Ativa:** Paragem imediata se desligado manualmente
+
+### 🔋 Monitorização de Baterias
+- **Alertas Dinâmicos:** Notificações quando bateria cai abaixo do limite
+- **Integrações Alexa:** Avisos de voz prioritários
+
+### 📢 Sistema de Notificações
+- **TTS Dinâmicas:** Notificações de voz adaptadas a horários
+- **Horários de Silêncio:** Respeita períodos configurados
+- **Múltiplos Canais:** Suporta vários tipos de notificação
+
+### 📅 Integrações Avançadas
+- **Calendário Inteligente:** Eventos sincronizados
+- **Nextcloud:** Suporte para Talk e OnlyOffice
+- **Paperless-NGX:** Arquivo digital de documentos
+
+---
+
+## 📚 Componentes Disponíveis
+
+### 🎨 Blueprints (7 disponíveis)
+1. **Watering Sector** - Sistema de rega otimizado (⭐ Completo e documentado)
+2. **Aviso Acessos Universal** - Notificações de acessos
+3. **Battery Alerts** - Alertas de bateria
+4. **Smart Dumb Dehumidifier** - Controlo de desumidificador
+5. **Smart Snailmail Box** - Caixa inteligente de correio
+6. **Smart Universal Calendar** - Calendário inteligente
+
+Ver: [`blueprints/README.md`](./blueprints/README.md)
+
+### 🔧 Scripts (2 principais)
+1. **Dynamic Notifications** - Notificações TTS adaptadas
+2. **Escalamento Aviso Porta** - Avisos em cascata para portas
+
+Ver: [`scripts/README.md`](./scripts/README.md)
+
+### 🎛️ Visões Dashboard
+- **Sistema de Rega** - Dashboard completo de controlo de rega
+
+Ver: [`views/`](./views/)
+
+---
+
+## 🛠️ Como Usar
+
+### 1. Estrutura de Diretórios
+Cada blueprint/script está organizado num diretório próprio com:
+- Ficheiro YAML principal com a automação/blueprint
+- `README.md` com documentação detalhada
+- Ficheiros adicionais de suporte (se aplicável)
+
+### 2. Importar um Blueprint
+No Home Assistant:
+1. Ir a: **Settings > Automations & Scenes > Blueprints > Import Blueprint**
+2. Selecionar o ficheiro YAML do blueprint desejado
+3. Preencher os parâmetros de entrada
+
+### 3. Usar um Script
+Referenciar no YAML de automações:
+```yaml
+action: script.[script_name]
+data:
+  param1: value1
+  param2: value2
+```
+
+---
+
+## 📖 Documentação Detalhada
+
+| Componente | Documentação | Status |
+|-----------|--------------|--------|
+| Watering Sector | [📄 Detalhada](./blueprints/watering_sector/README.md) | ✅ Completa |
+| Aviso Acessos | [📄 Início](./blueprints/aviso_acessos_universal/) | 🔄 Em desenvolvimento |
+| Battery Alerts | [📄 Início](./blueprints/battery_alerts/) | 🔄 Em desenvolvimento |
+| Smart Dehumidifier | [📄 Início](./blueprints/smart_dumb_dehumidifier/) | 🔄 Em desenvolvimento |
+| Smart Snailmail | [📄 Início](./blueprints/smart_snailmail_box/) | 🔄 Em desenvolvimento |
+| Smart Calendar | [📄 Início](./blueprints/smart_universal_calendar/) | 🔄 Em desenvolvimento |
+| Dynamic Notifications | [📄 Início](./scripts/dynamic_notifications/) | 🔄 Em desenvolvimento |
+| Escalamento Porta | [📄 Início](./scripts/escalamento_aviso_porta/) | 🔄 Em desenvolvimento |
+
+---
+
+## 🔒 Segurança
+
+> ⚠️ **Nota Importante:** Nunca partilhe publicamente o seu ficheiro `secrets.yaml`, tokens de acesso ou senhas de rede no GitHub.
+
+Consulte o `.gitignore` da raiz para ficheiros sensíveis excluídos.
+
+---
+
+## 🤝 Fluxo de Trabalho
+
+### Estrutura Padrão para Novos Blueprints/Scripts:
+1. Criar diretório em `blueprints/` ou `scripts/`
+2. Adicionar ficheiro YAML com a automação
+3. Criar `README.md` com:
+   - Descrição breve
+   - Funcionalidades
+   - Configuração de inputs
+   - Exemplos de uso
+   - Troubleshooting
+
+### Convenções de Nomenclatura:
+- **Diretórios:** `snake_case` (ex: `watering_sector`)
+- **Ficheiros YAML:** `snake_case` (ex: `watering_sector.yaml`)
+- **READMEs:** `README.md` (SEMPRE MAIÚSCULA)
+
+---
+
+## 📞 Suporte & Troubleshooting
+
+### Validação de Configuração
+No Home Assistant:
+**Developer Tools > YAML > Check Configuration**
+
+### Visualizar Logs
+```yaml
+logger:
+  default: info
+  logs:
+    homeassistant.components.automation: debug
+```
+
+---
+
+## 📝 Changelog
+
+### v1.0 (Setembro 2026)
+- ✅ Estrutura base criada
+- ✅ Watering Sector blueprint documentado
+- 🔄 Restantes blueprints em desenvolvimento
+
+---
+
+## 📄 Documentação Adicional
+
+Ver: [`manuais/`](./manuais/) para:
+- Manual de Utilização para a Família
+- Plano de Emergência Familiar
+- Guias de Serviços (Nextcloud, Paperless, etc.)
+
+---
+
+**Última atualização:** 2 de Setembro de 2026  
+**Versão Home Assistant:** Compatível com HA 2024.x+  
+**Responsável:** @acravo1
+
+
+================================================================================
+FILE: Castelo Branco\automations\README.md
+================================================================================
+
+# ⚙️ Automations - Configurações de Automação
+
+Automações simples e diretas implementadas em YAML.
+
+## 📋 Automações Disponíveis
+
+### 🚪 **Monitor de Portas**
+**Ficheiro:** `portas_monitor.yaml`  
+**ID:** `portas_monitor_geral`  
+**Alias:** "Segurança: Monitor de Abertura de Portas"
+
+**Descrição:** Monitora abertura de portas e envia avisos escalados através do script de escalamento.
+
+**Sensores Monitorados:**
+- Porta Principal (`binary_sensor.sensor_porta_principal`)
+- Portão Garagem (`binary_sensor.sensor_portao_garagem`)
+
+**Ações:**
+- Ativa script `script.escalamento_aviso_porta`
+- Identifica automaticamente a zona
+- Passa o sensor como parâmetro
+
+**Configuração:**
+```yaml
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.sensor_porta_principal
+      - binary_sensor.sensor_portao_garagem
+    to: "on"
+
+action:
+  - action: script.escalamento_aviso_porta
+    data:
+      target_sensor: "{{ trigger.entity_id }}"
+      nome_zona: >-
+        {{ 'Porta Principal' if trigger.entity_id == 'binary_sensor.sensor_porta_principal' else 'Garagem' }}
+```
+
+---
+
+## 🚀 Como Adicionar Novas Automações
+
+1. Criar novo ficheiro YAML em `automations/`
+2. Seguir estrutura padrão de automação Home Assistant
+3. Documentar no README (este ficheiro)
+4. Testar no Home Assistant
+
+---
+
+## 📝 Convenção de Nomenclatura
+
+- **Ficheiros YAML:** `snake_case.yaml`
+- **IDs de Automação:** `snake_case_com_prefixo`
+- **Aliases:** Descrição clara em português
+
+---
+
+## 🔗 Links Úteis
+
+- [Home Assistant Automations Docs](https://www.home-assistant.io/docs/automation/)
+- [YAML Trigger Types](https://www.home-assistant.io/docs/automation/trigger/)
+
+---
+
+**Última atualização:** 2 de Setembro de 2026  
+**Total de Automações:** 1 (Monitor de Portas)
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\README.md
+================================================================================
+
+# 🎨 Blueprints - Home Assistant
+
+Coleção de blueprints reutilizáveis para automações avançadas no Home Assistant.
+
+## 📋 Blueprints Disponíveis
+
+### 1. 🌊 **Watering Sector** (Rega por Setores)
+**Status:** ✅ Completo e Documentado  
+**Localização:** `./watering_sector/`  
+**Descrição:** Sistema inteligente de rega com 2 ciclos, sensor de humidade, pausa de absorção e controlo de cooldown.
+
+**Funcionalidades:**
+- Rega fracionada com pausa intermédia
+- Monitorização ativa de interrupção
+- Salvaguarda periódica
+- Notificações de voz (TTS)
+- Tranca de cooldown nativa
+
+[📖 Ver Documentação Completa](./watering_sector/README.md)
+
+---
+
+### 2. 🚪 **Aviso Acessos Universal** (Notificações de Acessos)
+**Status:** 🔄 Em Desenvolvimento  
+**Localização:** `./aviso_acessos_universal/`  
+**Descrição:** Blueprint para avisos universais quando há acessos em portas/janelas.
+
+**Ficheiro YAML:** `aviso_acessos_universal.yaml`
+
+[📖 Ver Documentação](./aviso_acessos_universal/README.md)
+
+---
+
+### 3. 🔋 **Battery Alerts** (Alertas de Bateria)
+**Status:** 🔄 Em Desenvolvimento  
+**Localização:** `./battery_alerts/`  
+**Descrição:** Sistema automático de alertas quando dispositivos têm bateria fraca.
+
+**Ficheiro YAML:** `alerta_baterias_fracas_alexa.yaml`
+
+[📖 Ver Documentação](./battery_alerts/README.md)
+
+---
+
+### 4. 💨 **Smart Dumb Dehumidifier** (Desumidificador Inteligente)
+**Status:** 🔄 Em Desenvolvimento  
+**Localização:** `./smart_dumb_dehumidifier/`  
+**Descrição:** Controlo inteligente de desumidificadores com automações condicionais.
+
+**Ficheiro YAML:** `gestao_desumidificador_inteligente.yaml`
+
+[📖 Ver Documentação](./smart_dumb_dehumidifier/README.md)
+
+---
+
+### 5. 📮 **Smart Snailmail Box** (Caixa de Correio Inteligente)
+**Status:** 🔄 Em Desenvolvimento  
+**Localização:** `./smart_snailmail_box/`  
+**Descrição:** Notificações inteligentes quando há correio na caixa.
+
+**Ficheiro YAML:** `caixa_correio_inteligente.yaml`
+
+[📖 Ver Documentação](./smart_snailmail_box/README.md)
+
+---
+
+### 6. 📅 **Smart Universal Calendar** (Calendário Universal Inteligente)
+**Status:** 🔄 Em Desenvolvimento  
+**Localização:** `./smart_universal_calendar/`  
+**Descrição:** Integração de calendários com automações baseadas em eventos.
+
+**Ficheiro YAML:** `calendario_inteligente_universal.yaml`
+
+[📖 Ver Documentação](./smart_universal_calendar/README.md)
+
+---
+
+## 🚀 Como Usar Blueprints
+
+### Importar um Blueprint no Home Assistant
+
+1. **Menu:** Settings > Automations & Scenes > Blueprints
+2. **Botão:** "Import Blueprint"
+3. **Selecionar:** O ficheiro YAML do blueprint desejado
+4. **Preencher:** Os parâmetros de entrada solicitados
+5. **Confirmar:** Guardar a nova automação
+
+### Estrutura de um Blueprint
+
+Cada blueprint está organizado assim:
+```
+[blueprint_name]/
+├── [blueprint_name].yaml        # Ficheiro do blueprint
+└── README.md                    # Documentação detalhada
+```
+
+---
+
+## 📝 Convenção de Nomenclatura
+
+- **Diretórios:** `snake_case` (ex: `watering_sector`)
+- **Ficheiros YAML:** `snake_case` (ex: `watering_sector.yaml`)
+- **Documentação:** `README.md` (SEMPRE maiúscula)
+
+---
+
+## 🔗 Links Úteis
+
+- [Home Assistant Blueprints Docs](https://www.home-assistant.io/docs/automation/blueprints/)
+- [Blueprint Examples](https://github.com/home-assistant/blueprints)
+
+---
+
+**Última atualização:** 2 de Setembro de 2026  
+**Total de Blueprints:** 6 (1 completo, 5 em desenvolvimento)
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\aviso_acessos_universal\README.md
+================================================================================
+
+# 🚪 Aviso Acessos Universal - Blueprint
+
+Sistema universal para notificações quando há acessos em portas, janelas ou outros sensores.
+
+## 📋 Descrição
+
+Este blueprint permite criar notificações automáticas e personalizadas sempre que um sensor de abertura muda de estado. Suporta múltiplos sensores, escalamento de avisos e integração com sistemas de notificação.
+
+## 🎯 Funcionalidades
+
+- ✅ Monitorização de múltiplos sensores
+- ✅ Notificações customizáveis
+- ✅ Escalamento de avisos por zona
+- ✅ Filtros por hora/dia
+- ✅ Histórico de eventos
+- ✅ Integração com TTS
+
+## 🛠️ Configuração
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `target_sensor` | entity_id | Sensor a monitorizar (binary_sensor) |
+| `zone_name` | texto | Nome descritivo da zona |
+| `notification_service` | serviço | Serviço para enviar notificações |
+
+## 📖 Documentação Completa
+
+[👈 Voltar ao índice de blueprints](../README.md)
+
+**Status:** 🔄 Em Desenvolvimento
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Battery alerts\README.md
+================================================================================
+
+
+# 🔋 Battery Alerts - Blueprint
+
+Sistema automático de alertas e notificações para dispositivos com bateria fraca.
+
+## 📋 Descrição
+
+Este blueprint monitora os níveis de bateria de dispositivos e envia notificações automáticas quando a bateria cai abaixo de um limite configurável. Ideal para sensores wireless, telecomandos e dispositivos IoT.
+
+## 🎯 Funcionalidades
+
+- ✅ Monitorização automática de entidades com atributo `battery_level`
+- ✅ Notificações personalizáveis por dispositivo
+- ✅ Alertas em cascata (aviso, crítico, emergência)
+- ✅ Integração com Alexa para avisos de voz
+- ✅ Exclusão de horas de silêncio
+- ✅ Histórico de notificações enviadas
+
+## 🛠️ Configuração
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `battery_sensor` | entity_id | Sensor de nível de bateria |
+| `battery_threshold` | número | Percentagem mínima (padrão: 20%) |
+| `notification_service` | serviço | Serviço para notificações |
+| `alert_level` | select | Nível de alerta (baixo/médio/crítico) |
+
+## 📖 Documentação Completa
+
+[👈 Voltar ao índice de blueprints](../README.md)
+
+**Status:** 🔄 Em Desenvolvimento
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Smart Dumb Dehumidifier\README.md
+================================================================================
+
+# 💨 Smart Dumb Dehumidifier - Blueprint
+
+Sistema inteligente para controlo de desumidificadores com automações personalizadas.
+
+## 📋 Descrição
+
+Blueprint para automatizar desumidificadores "burros" (sem smart features nativas) através de relés inteligentes. Permite controlo baseado em humidade, temperatura e horários.
+
+## 🎯 Funcionalidades
+
+- ✅ Controlo automático por sensor de humidade
+- ✅ Pausa automática por tempo ou humidade atingida
+- ✅ Horários de operação personalizados
+- ✅ Proteção contra sobreaquecimento
+- ✅ Notificações de estado
+- ✅ Histórico de operação
+
+## 🛠️ Configuração
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `dehumidifier_switch` | switch | Relé de controlo do desumidificador |
+| `humidity_sensor` | entity_id | Sensor de humidade relativa |
+| `humidity_threshold` | número | Humidade alvo (padrão: 60%) |
+| `max_runtime` | número | Tempo máximo de funcionamento (minutos) |
+
+## 📖 Documentação Completa
+
+[👈 Voltar ao índice de blueprints](../README.md)
+
+**Status:** 🔄 Em Desenvolvimento
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Smart Snailmail Box\README.md
+================================================================================
+
+# 📮 Smart Snailmail Box - Blueprint
+
+Sistema inteligente para notificações quando há correio na caixa de correio.
+
+## 📋 Descrição
+
+Blueprint que monitora um sensor de movimento/abertura na caixa de correio e envia notificações quando há novo correio. Ideal para não perder nenhuma encomenda ou carta importante.
+
+## 🎯 Funcionalidades
+
+- ✅ Detecção de movimento/abertura
+- ✅ Notificações imediatas de novo correio
+- ✅ Confirmação de recolha
+- ✅ Histórico de eventos
+- ✅ Filtro de falsos positivos
+- ✅ Integração com Alexa
+
+## 🛠️ Configuração
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `motion_sensor` | entity_id | Sensor de movimento/abertura |
+| `notification_service` | serviço | Serviço para notificações |
+| `debounce_time` | número | Tempo de proteção contra tremulações (segundos) |
+| `quiet_hours_start` | time | Início do silêncio |
+| `quiet_hours_end` | time | Fim do silêncio |
+
+## 📖 Documentação Completa
+
+[👈 Voltar ao índice de blueprints](../README.md)
+
+**Status:** 🔄 Em Desenvolvimento
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Smart Universal Calendar\README.md
+================================================================================
+
+# 📅 Smart Universal Calendar - Blueprint
+
+Integração de calendários com automações inteligentes baseadas em eventos.
+
+## 📋 Descrição
+
+Blueprint para sincronizar eventos de calendários (Google, Nextcloud, CalDAV) com automações no Home Assistant. Permite acionar ações baseadas no começo/fim de eventos.
+
+## 🎯 Funcionalidades
+
+- ✅ Sincronização de múltiplos calendários
+- ✅ Acionamento no começo de evento
+- ✅ Acionamento no fim de evento
+- ✅ Filtros por tipo de evento
+- ✅ Notificações personalizadas
+- ✅ Histórico de eventos processados
+
+## 🛠️ Configuração
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `calendar_entity` | entity_id | Entidade de calendário |
+| `event_prefix` | texto | Prefixo para filtrar eventos (opcional) |
+| `trigger_action` | select | Ação no começo/fim/ambos |
+| `automation_on_start` | ação | Automação a correr no começo |
+| `automation_on_end` | ação | Automação a correr no fim |
+
+## 📖 Documentação Completa
+
+[👈 Voltar ao índice de blueprints](../README.md)
+
+**Status:** 🔄 Em Desenvolvimento
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Watering Sector\README.md
+================================================================================
+
+# 🌊 Automação de Rega Otimizada (Castelo Branco)
+
+Blueprint avançado para controlo inteligente e fracionado de eletroválvulas de rega no ecossistema Home Assistant, desenhado com foco em eficiência hídrica e resiliência mecânica.
+
+## 🚀 Funcionalidades Mestre
+
+1. **Rega Fracionada em 2 Ciclos:** Divide o tempo total inserido no `input_number` em duas metades exatas, aplicando uma pausa intermédia (absorção) para evitar alagamentos e desperdício de água por escorrimento.
+2. **Monitorização Ativa de Interrupção:** Utiliza um barramento `wait_for_trigger` em cada ciclo. Se desligares o interruptor físico ou virtual a meio da rega, o motor deteta o corte no milissegundo, cancela a automação e dispara um aviso de voz prioritário.
+3. **Salvaguarda Periódica (Time Pattern):** Caso a quebra de humidade ocorra durante o período de resguardo, um gatilho secundário corre a cada 15 minutos para garantir que o setor não fica desidratado.
+4. **Tranca de Cooldown Nativa:** Impede re-disparos sucessivos em loops curtos, lendo o tempo configurado em minutos e avaliando o atributo `last_triggered`.
+5. **Notificações de Voz Inteligentes (TTS):** Integra-se com o script de mensagens dinâmicas, respeitando as restrições horárias de silêncio configuradas nos ajudantes da casa.
+
+## 📂 Estrutura de Diretórios no Repositório
+
+Para o Home Assistant indexar este Blueprint automaticamente via GitHub, o ficheiro deve residir estritamente neste caminho:
+```text
+homeassistant/
+└── blueprints/
+    └── automation/
+        └── acravo1/
+            └── Watering Sector/
+                ├── Watering_Sector.yaml
+                └── README.md
+```
+
+## 🛠️ Configuração dos Inputs
+
+| Input ID | Tipo | Descrição |
+|---|---|---|
+| `sector_name` | Texto | Nome descritivo do setor (ex: Relvado Traseiras). |
+| `soil_moisture_sensor` | Sensor | Entidade física do sensor de humidade do solo. |
+| `moisture_limit` | input_number | Threshold/Limite mínimo de humidade que dispara a rega. |
+| `watering_duration` | input_number | Tempo total de rega pretendido (em minutos). |
+| `cooldown_duration` | input_number | Tempo de resguardo obrigatório entre regas (em minutos). |
+| `watering_switch` | Switch | Relé/Eletroválvula física que controla a água. |
+| `soak_duration_minutes` | Número | Tempo de descanso da terra entre o Ciclo 1 e o Ciclo 2. |
+| `quiet_hours_start` | input_datetime | Início do horário de silêncio para avisos sonoros. |
+| `quiet_hours_end` | input_datetime | Fim do horário de silêncio para avisos sonoros. |
+
+
+================================================================================
+FILE: Castelo Branco\manuais\Manual_Nextcloud_OnlyOffice.md
+================================================================================
+
+# 📑 GUIA COMPLETO: UTILIZAÇÃO DO NEXTCLOUD E ONLYOFFICE
+
+Este guia ensina a gerir os ficheiros da família e a editar documentos de texto ou folhas de cálculo diretamente no servidor, sem precisar de instalar programas no computador.
+
+---
+
+## 🚀 PASSO 1: ACEDER E ENTRAR NA PLATAFORMA
+
+1. Abra o navegador de Internet (Chrome, Safari ou Edge).
+2. Na barra de endereços do topo, digite exatamente: `http://nextcloud.lenovo` e faça **Enter**.
+3. O ecrã vai mostrar o botão azul do **Portal Central da Família (Authentik SSO)**. Clica no botão.
+4. Selecione a opção **Entrar com o Google** e insira os dados da sua conta Google familiar:
+   * **Ana:** `amc_manager`
+   * **Francisco:** `fac_manager`
+5. Já está dentro da sua área privada de ficheiros!
+
+---
+
+## 📁 PASSO 2: ENVIAR E ORGANIZAR FICHEIROS
+
+### Como criar uma pasta nova:
+1. No canto superior esquerdo, clique no botão redondo com o símbolo de mais (**+**).
+2. No menu que se abre, escolha **Nova pasta**.
+3. Digite o nome da pasta (ex: "Fotografias Palmela 2026") e prima **Enter**.
+
+### Como enviar ficheiros do computador para o servidor:
+1. Entre na pasta onde deseja guardar o ficheiro (clicando duas vezes em cima dela).
+2. Clique no botão de mais (**+**) no topo e selecione **Carregar ficheiro**.
+3. Escolha a fotografia ou documento do seu computador e clique em **Abrir**. O ficheiro é enviado instantaneamente para o SSD do Lenovo.
+
+---
+
+## 📊 PASSO 3: EDITAR FOLHAS DE CÁLCULO E DOCUMENTOS (ONLYOFFICE)
+
+O nosso servidor tem o motor **ONLYOFFICE** integrado. Isto significa que pode criar e editar ficheiros do Excel ou Word diretamente no browser.
+
+### Como criar um novo documento ou folha de cálculo:
+1. Clique no botão de mais (**+**).
+2. Escolha **Novo documento de texto** (para Word) ou **Nova folha de cálculo** (para Excel).
+3. Atribua um nome ao ficheiro e clique na seta para avançar. O ecrã do ONLYOFFICE abre-se de imediato.
+
+### Regras de Ouro da Edição:
+*   **Salvamento Automático:** Não existe botão de "Guardar". Cada letra ou número que digita é gravado na RAM e no SSD do servidor no exato milissegundo em que tecla. Se o computador for abaixo, zero dados são perdidos.
+*   **Trabalho em Simultâneo:** A Ana e o Francisco podem abrir a mesma folha de cálculo ao mesmo tempo. Verá o cursor da outra pessoa a mexer-se em tempo real na tela.
+*   **Fechar em Segurança:** Quando terminar de trabalhar, basta fechar a aba do browser. O ficheiro fica fechado e selado na nuvem.
+
+
+================================================================================
+FILE: Castelo Branco\manuais\Manual_Nextcloud_Talk.md
+================================================================================
+
+# 💬 GUIA COMPLETO: CONFIGURAR E USAR O NEXTCLOUD TALK
+
+O Talk é o nosso "WhatsApp" 100% privado. As mensagens, chamadas e videochamadas correm estritamente dentro do nosso Lenovo Host, livres de qualquer partilha de metadados com empresas externas.
+
+---
+
+## 📱 PASSO 1: INSTALAR E CONFIGURAR NO TELEMÓVEL
+
+Para que a aplicação funcione e faça o aperto de mão com o nosso servidor, siga este roteiro de configuração:
+
+### A) Se estiver FORA de casa (Na rua em 4G/5G):
+1. Antes de abrir o Talk, abra a aplicação **WireGuard** no seu telemóvel.
+2. Ative o botão do túnel **"CRAVO_HOMELAB_VPN"**. Isto estabelece uma ligação segura cifrada com o nosso servidor.
+
+### B) Configuração da App Talk (Entrada Única):
+1. Vá à **Google Play Store** (Android) ou **App Store** (iPhone).
+2. Instale a app oficial **Nextcloud Talk** (ícone azul de um balão de fala).
+3. Abra a aplicação no telemóvel.
+4. No campo **Endereço do Servidor**, digite exatamente o nosso link local limpo e sem portas:
+   `http://nextcloud.lenovo`
+5. Clique em **Avançar**.
+6. O ecrã vai abrir o nosso portal de login. Escolha **Entrar com o Google** e insira os seus dados de utilizador familiar (`amc_manager` ou `fac_manager`).
+7. Clique no botão azul **Conceder Acesso**. A app faz a sincronização na RAM e está pronta a faturar no pico!
+
+---
+
+## 💬 PASSO 2: INICIAR CONVERSAS E VIDEOCHAMADAS
+
+### Como enviar uma mensagem:
+1. Abra a app Talk no telemóvel ou aceda no computador via `http://nextcloud.lenovo` clicando no ícone do balão de fala no topo.
+2. Na listagem de conversas esquerda, clique no nome da pessoa (Ana ou Francisco).
+3. Digite a mensagem no fundo do ecrã e envie.
+
+### Como fazer uma Videochamada Privada (WebRTC):
+1. Entre na sala de chat da pessoa.
+2. No canto superior direito, clique no ícone da **Câmara de Vídeo**.
+3. O telemóvel da outra pessoa vai tocar imediatamente. 
+4. **Resiliência de Rede:** Graças ao servidor de sinalização **STUN da Google (stun.l.google.com:19302)** que configurámos no banco de dados do Nextcloud, os telemóveis descobrem as rotas de rede um do outro e mantêm a chamada estável e com qualidade máxima, sem timeouts de 5 segundos.
+
+
+================================================================================
+FILE: Castelo Branco\manuais\Manual_Paperless_NGX.md
+================================================================================
+
+# 🗃️ GUIA COMPLETO: NAVEGAR NO COFRE DE FATURAS (PAPERLESS)
+
+O Paperless-ngx é o arquivo morto digital da casa. Ele guarda atualmente **12.574 documentos e faturas** digitalizados, lendo o texto de dentro de cada papel para que o encontre em segundos.
+
+---
+
+## 🚀 PASSO 1: ACEDER AO COFRE
+
+1. No browser do seu computador ou telemóvel, digite: `http://paperless.lenovo` e faça **Enter**.
+2. Insira o seu Nome de Utilizador e Password familiar fornecidos pelo Administrador.
+3. Clique em **Iniciar Sessão**. Irá ver o painel principal com os últimos documentos carregados.
+
+---
+
+## 🔍 PASSO 2: COMO FAZER PESQUISAS INTELIGENTES (A MAGIA DO OCR)
+
+Não precisa de procurar pasta por pasta. O sistema lê o conteúdo biometrizado dos documentos.
+
+1. No topo do ecrã, clique na barra de pesquisa que diz **Pesquisar documentos**.
+2. Digite qualquer palavra que esteja escrita no papel que procura. Exemplos:
+   * Se digitar `Continente`, o sistema mostra todas as faturas do supermercado.
+   * Se digitar `Seguro`, aparecem as apólices do carro ou da casa.
+   * Se digitar um valor exato (ex: `42,50`), o Paperless localiza a fatura que teve exatamente esse custo.
+3. Prima **Enter** e o documento aparece na tela em menos de 1 segundo. Clique nele para abrir o PDF e ler o papel original.
+
+---
+
+## 🏷️ PASSO 3: O SISTEMA DE ETIQUETAS E CORRESPONDÊNCIA
+
+O servidor organiza os papéis sozinho utilizando Inteligência Artificial:
+*   **Correspondentes:** Identifica quem enviou a fatura (ex: "EDP", "NOS", "Finanças").
+*   **Tipos de Documento:** Separa o que é uma "Fatura", um "Recibo" ou um "Contrato".
+*   **Etiquetas (Tags):** Aplica marcas de cor automáticas, como `Por Pagar` ou `IRS`.
+
+### Como descarregar ou imprimir um documento:
+1. Abra o documento pretendido na listagem.
+2. No menu lateral direito, clique no botão **Transferir** (ícone de seta para baixo) para guardar o PDF no seu computador, ou no ícone da **Impressora** para enviar para o papel físico.
+
+
+================================================================================
+FILE: Castelo Branco\manuais\Manual_Utilizacao_Familia.md
+================================================================================
+
+# 📖 GUIA DE ACESSO AO COCKPIT DIGITAL DA FAMÍLIA (CRAVO HOMELAB)
+
+Este é o documento unificado e soberano para a utilização das plataformas digitais instaladas no nosso servidor central. Todos os serviços correm de forma privada dentro das nossas quatro paredes, livres de publicidade ou espionagem exterior.
+
+---
+
+## 📡 1. REGRAS DE REDE (COMO ACEDER EM CASA)
+
+Para simplificar a utilização, eliminámos os números de portas complexos. Sempre que estiver ligado ao Wi-Fi de casa, pode aceder a qualquer plataforma digitando estes nomes limpos diretamente na barra de endereços do browser (Chrome, Safari ou Edge):
+
+*   **Ficheiros e Nuvem da Família:** http://nextcloud.lenovo
+*   **Arquivo de Documentos e Faturas:** http://paperless.lenovo
+*   **Chat e Videochamadas Privadas:** http://talk.lenovo
+*   **Painel de Controlo da Casa:** https://homeassistant.lenovo
+
+---
+
+## 📑 2. NEXTCLOUD (OS NOSSOS FICHEIROS E DOCUMENTOS)
+
+A nossa nuvem substitui na totalidade o Google Drive e o Dropbox. Aqui salvaguardamos fotografias, cópias de segurança e ficheiros importantes.
+
+### 👥 Contas Autorizadas:
+*   **Ana:** Nome de utilizador: amc_manager
+*   **Francisco:** Nome de utilizador: fac_manager
+*   *Nota: O acesso está blindado e unificado através do Social Login da Google via Authentik SSO.*
+
+### 🛠️ O Editor de Documentos (ONLYOFFICE Integrado):
+Ao abrir qualquer documento de texto ou folha de cálculo dentro do Nextcloud, o editor **ONLYOFFICE** carrega de forma nativa e automática. Não necessita de instalar o Microsoft Office no computador. As alterações são guardadas instantaneamente no SSD do servidor.
+
+---
+
+## 🗃️ 3. PAPERLESS-NGX (O COFRE DE FATURAS DIGITALIZADAS)
+
+O nosso arquivo morto digital já conta com **12.574 documentos e faturas** processados sem qualquer duplicação. 
+
+### 🚀 Como utilizar no dia a dia:
+1.  Aceda a http://paperless.lenovo
+2.  Faça o login com as suas credenciais seguras.
+3.  **A Pesquisa Inteligente:** Pode pesquisar por qualquer palavra (ex: "Continente", "Seguro", "Rega", "Fatura"). O motor interno lê o texto de dentro dos PDFs digitalizados e encontra o documento em menos de 1 segundo.
+4.  **Organização Eficiente:** O sistema aplica etiquetas automáticas baseadas em inteligência artificial para separar as despesas por categorias.
+
+---
+
+## 💬 4. NEXTCLOUD TALK (O NOSSO WHATSAPP PRIVADO)
+
+Para garantir que as nossas conversas e videochamadas familiares não são lidas por empresas externas, o Nextcloud Talk gere as comunicações de forma totalmente cifrada e ponto-a-ponto (WebRTC).
+
+### 📱 Configuração no Telemóvel:
+1.  Instale a aplicação gratuita **Nextcloud Talk** a partir da Google Play Store ou Apple App Store.
+2.  No campo do endereço do servidor, digite a nossa rota externa segura: https://duckdns.org
+3.  Insira o seu utilizador familiar (amc_manager ou fac_manager).
+
+### 🎥 Chamadas Resilientes:
+Configurámos os servidores de sinalização **STUN da Google (porto 19302)** em background. Isto garante que, mesmo que esteja na rua ligado à rede móvel 4G/5G da NOS ou da MEO, a chamada toca instantaneamente em casa com qualidade máxima e sem quebras de ligação.
+
+---
+
+## 🚨 5. SEGURANÇA E SUPORTE DE REFORMA
+
+Se algum serviço apresentar lentidão, o cockpit de monitorização central (**Uptime Kuma**) valida o estado de saúde do hardware de 60 em 60 segundos na porta de operações. O sistema de alarme físico está permanentemente interligado em background, mantendo o cartão SIM ativo como canal redundante de chamadas de emergência direta para os telemóveis.
+
+
+================================================================================
+FILE: Castelo Branco\manuais\Plano_de_Emergencia_Familiar.md
+================================================================================
+
+# Plano de Emergência Familiar — Quinta da Granja, Castelo Branco
+
+---
+
+## Controlo de Versões
+
+| Versão | Data | Autor | Descrição das Alterações |
+| :---: | :---: | :--- | :--- |
+| **1.0** | 18/08/2026 | António Cravo | Versão inicial do Plano de Emergência Familiar e estrutura das mochilas. |
+| **2.0** | 18/08/2026 | António Cravo | Atualização do inventário com equipamentos adquiridos (cobertores térmicos, capas de chuva, rádios PMR446, painéis solares, powerbanks, lanternas, canivete suíço, multifunções LIDL e corda). Redistribuição de carga pelas 3 mochilas familiares. |
+
+---
+
+## 1. Contexto e Perfis da Família
+
+| Elemento | Detalhes |
+| :--- | :--- |
+| **Localização / Residência** | Apartamento na Quinta da Granja, Castelo Branco |
+| **Especificidade do Imóvel** | **100% Elétrico** (Sem instalação de gás canalizado ou botijão) |
+| **Membros da Família** | **António Cravo** (65 anos)<br>**Ana Maria Moutela Cravo** (65 anos)<br>**Francisco António Cravo** (36 anos) |
+| **Animais de Estimação** | **2 Cães** |
+| **Enquadramento Técnico** | • **FEMA** (*Ready.gov* / *Pet Preparedness Guidelines*)<br>• **PMEPC** (Plano Municipal de Emergência de Proteção Civil de Castelo Branco)<br>• Diretrizes da **ANEPC** |
+
+---
+
+## 2. Estrutura Modular das Mochilas de Emergência (Distribuição de Carga)
+
+As recomendações da **FEMA** e da **Proteção Civil** apontam para uma **distribuição individual de mochilas**. A integração do equipamento adquirido foi distribuída equitativamente pelas 3 mochilas para equilibrar o peso e garantir redundância.
+
+### Divisão Recomendada por Elemento:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                       SISTEMA MODULAR DE MOCHILAS                       │
+├───────────────────┬─────────────────────────┬───────────────────────────┤
+│  MOCHILA 1 (Pai)  │   MOCHILA 2 (Mãe)       │   MOCHILA 3 (Filho/Cães)  │
+│  [António]        │   [Ana Maria]           │   [Francisco]             │
+├───────────────────┼─────────────────────────┼───────────────────────────┤
+│ • Documentação    │ • Primeiros socorros    │ • Kit dos 2 Cães (Tudo)   │
+│ • Rádio PMR446 #1 │ • Medicação família     │ • Rádios PMR446 #3 e #4   │
+│ • Painel Solar #1 │ • Rádio PMR446 #2       │ • Painel Solar #2         │
+│ • Powerbank #1    │ • Canivete Suíço        │ • Powerbank #2            │
+│ • Lanterna #1     │ • Capa de Chuva #2      │ • Lanterna #2             │
+│ • Capa de Chuva #1│ • Cobertor Térmico #2   │ • Alicate Multifunções    │
+│ • Cobertor #1     │ • Água / Comida (Ana)   │ • Corda Enrolada          │
+│ • Água / Comida   │                         │ • Capa de Chuva #3        │
+│                   │                         │ • Cobertor Térmico #3     │
+└───────────────────┴─────────────────────────┴───────────────────────────┘
+```
+
+---
+
+## 3. Riscos Específicos do Concelho de Castelo Branco
+
+1. **Ondas de Calor e Incêndios Rurais/Periurbanos:** Risco elevado no verão, gerando fumo denso, degradação da qualidade do ar e cortes na rede elétrica.
+2. **Apagões e Falhas na Rede Elétrica:** Sendo o apartamento **100% elétrico**, um apagão implica interrupção total de confeção de alimentos e aquecimento/refrigeração (relevância acrescida para iluminação autónoma, recarga solar e comida pronta a comer).
+3. **Sismos:** Zona de vulnerabilidade moderada no centro de Portugal; evacuação rápida pelas escadas após abalo.
+4. **Cheias e Enxurradas Urbanas:** Episódios de precipitação intensa concentrada em curto espaço de tempo.
+
+---
+
+## 4. Pontos de Encontro e Estruturas Municipais (PMEPC Castelo Branco)
+
+### Pontos de Encontro Definidos
+* **Ponto Interno (Casa):** Corredor central ou divisão interior sem janelas/espelhos (para sismos ou tempestades).
+* **Ponto Próximo (Evacuação da Quinta da Granja):** Parque infantil / Espaço aberto da Quinta da Granja, a uma distância segura da fachada do prédio (prevenção de queda de escombros/vidros).
+* **ZCAP (Zona de Concentração de Apoio à População):** Em caso de evacuação prolongada ou desalojamento, o município ativa ZCAPs nos pavilhões desportivos ou escolas da cidade (ex.: Pavilhão Municipal ou Parque Urbano/Zona de Lazer).
+
+### Protocolo de Comunicação e Avisos Municipais
+* **Rádios Intercomunicadores (PMR446 - Banda Livre):** Utilizar os rádios em canais pré-definidos (ex.: Canal 1 sem sub-tom) para manter contacto direto caso a família fique separada durante a evacuação.
+* **Contacto Familiar Fora do Distrito:** Designar um contacto fora do distrito de Castelo Branco para centralizar mensagens.
+* **Mensagens Breves (SMS):** Preferir SMS a chamadas telefónicas para evitar saturação da rede móvel local.
+* **Avisos Locais:** Sintonia em rádio AM/FM (Antena 1 ou emissoras locais) para acompanhar comunicados do Serviço Municipal de Proteção Civil.
+
+---
+
+## 5. Procedimentos de Ação por Tipologia de Emergência
+
+### A. Sismo (Baixar, Proteger, Aguardar)
+1. **Durante o Abalo:** Ajoelhar, proteger a cabeça sob uma mesa robusta ou junto a um pilar estrutural. Afastar de janelas e armários.
+2. **Após o Abalo:** Desligar o disjuntor geral do **Quadro Elétrico** e a torneira da água (se seguro), agarrar nas mochilas respetivas, trelar os 2 cães, ligar os rádios intercomunicadores e evacuar pelas **escadas**. **NUNCA usar o elevador.**
+
+### B. Incêndio / Fumo Denso
+1. **Incêndio no prédio:** Evacuar e fechar portas. Se o fumo invadir as escadas, **ficar no apartamento**, selar a porta de entrada com panos húmidos, ir para a varanda/janela oposta e sinalizar presença.
+
+---
+
+## 6. Inventário Detalhado do Sistema de Mochilas (Com Equipamento Adquirido)
+
+### Mochila 1 (António — Logística, Documentação & Energia A)
+- [x] **1x Cobertor térmico prateado (Adquirido).**
+- [x] **1x Capa para a chuva (Adquirida).**
+- [x] **1x Rádio intercomunicador PMR446 de banda livre (Adquirido).**
+- [x] **1x Painel solar dobrável (Adquirido).**
+- [x] **1x Powerbank de elevada capacidade (Adquirido).**
+- [x] **1x Lanterna (Adquirida).**
+- [ ] Fotocópias de documentos (CC, NIF, escrituras, apólices de seguro) + Pen USB criptografada.
+- [ ] Rádio portátil AM/FM a pilhas / dínamo + pilhas sobressalentes.
+- [ ] Dinheiro em numerário (notas de pequeno valor e moedas).
+- [ ] Água (1,5 L) e alimentação não perecível para 3 dias.
+
+### Mochila 2 (Ana Maria — Saúde, Primeiros Socorros & Corte)
+- [x] **1x Cobertor térmico prateado (Adquirido).**
+- [x] **1x Capa para a chuva (Adquirida).**
+- [x] **1x Rádio intercomunicador PMR446 de banda livre (Adquirido).**
+- [x] **1x Canivete Suíço (Adquirido).**
+- [ ] Kit completo de primeiros socorros (desinfetante, compressas, pensos, ligaduras).
+- [ ] Medicação de toma diária/crónica para a família (mínimo de 7 a 10 dias de reserva) + lista de dosagens/receitas.
+- [ ] Toalhetes húmidos, álcool em gel e itens de higiene pessoal.
+- [ ] Máscaras FFP2 (essenciais em caso de fumo de incêndio urbano/rural).
+- [ ] Água (1,5 L) e alimentação pronta a comer.
+
+### Mochila 3 (Francisco — Ferramentas, Energia B & Kit dos 2 Cães)
+- [x] **1x Cobertor térmico prateado (Adquirido).**
+- [x] **1x Capa para a chuva (Adquirida).**
+- [x] **2x Rádios intercomunicadores PMR446 de banda livre (Adquiridos - 1 principal + 1 de reserva/substituição).**
+- [x] **1x Painel solar dobrável (Adquirido).**
+- [x] **1x Powerbank de elevada capacidade (Adquirido).**
+- [x] **1x Lanterna (Adquirida).**
+- [x] **1x Ferramenta multifunções do LIDL (Adquirida).**
+- [x] **1x Corda enrolada (Adquirida).**
+- [ ] **Kit Específico para os 2 Cães (Norma FEMA):**
+  - [ ] Ração seca para 3 a 5 dias para ambos os cães.
+  - [ ] Taças dobráveis de silicone para água e ração.
+  - [ ] 2 Trelas robustas, peitorais com chapa de identificação e 2 açaimes confortáveis.
+  - [ ] Cópias dos boletins de vacina / passaportes veterinários.
+  - [ ] Sacos para dejetos e toalhetes de limpeza animal.
+- [ ] Água adicional dedicada aos cães (~2L a 3L) + Água e comida para o Francisco.
+- [ ] Apito de emergência.
+
+---
+
+## 7. Tarefas de Segurança na Habitação (Sem Gás)
+
+* **Corte Geral de Utilidades Elétricas e Hídricas:**
+  * **Quadro Elétrico:** Desligar o disjuntor geral (evita curto-circuitos ou incêndios no regresso da energia após falha grave).
+  * **Água:** Fechar a torneira/válvula de passagem geral da fração.
+* **Fixação de Mobiliário:** Garantir a fixação de estantes e móveis altos às paredes para prevenção sísmica.
+
+---
+
+## 8. Contactos Úteis de Emergência (Castelo Branco)
+
+| Entidade / Serviço | Número de Contacto |
+| :--- | :--- |
+| **Emergência Nacional** | **112** |
+| **Proteção Civil Municipal (Linha Gratuita)** | **800 272 112** |
+| **Proteção Civil Municipal (Atendimento Geral)** | **272 330 330** |
+| **Bombeiros Voluntários de Castelo Branco** | **272 342 122** |
+| **PSP — Comando Distrital de Castelo Branco** | **272 038 900** |
+| **GNR — Comando Territorial de Castelo Branco** | **272 340 900** |
+| **SNS 24** | **808 24 24 24** |
+| **Contacto Familiar Fora da Região** | *[ Inserir Nome e Número ]* |
+
+---
+
+## 9. Checklist de Manutenção Semestral
+
+- [ ] Testar os 4 rádios intercomunicadores PMR446 e recarregar as respetivas baterias.
+- [ ] Testar o carregamento dos 2 powerbanks através dos painéis solares dobráveis ao sol.
+- [ ] Validar prazos de validade da água, comida e ração dos cães.
+- [ ] Testar lanternas e pilhas.
+- [ ] Atualizar medicamentos de uso diário nas mochilas.
+- [ ] Rever a atribuição de mochilas e os pontos de encontro familiares.
+Plano_de_Emergencia_Familiar-v2.md
+A apresentar Plano_de_Emergencia_Familiar-v2.md.
+
+
+================================================================================
+FILE: Castelo Branco\manuais\README.md
+================================================================================
+
+# 📚 Manuais - Documentação Técnica
+
+Guias de utilização, manuais de integração e planos de emergência.
+
+## 📋 Documentação Disponível
+
+### 👨‍👩‍👧‍👦 **Manual de Utilização para a Família**
+**Ficheiro:** `Manual_Utilizacao_Familia.md`  
+**Descrição:** Guia simples e prático para membros da família utilizarem o sistema.
+
+**Conteúdo:**
+- Como controlar luzes e temperaturas
+- Ativar/desativar modos
+- Usar dashboards
+- Troubleshooting básico
+
+---
+
+### 🆘 **Plano de Emergência Familiar**
+**Ficheiro:** `Plano_de_Emergencia_Familiar.md`  
+**Descrição:** Procedimentos a seguir em situações de emergência.
+
+**Conteúdo:**
+- Cortes de energia
+- Falhas de internet
+- Desativa ações automáticas
+- Contactos de emergência
+
+---
+
+### ☁️ **Manual Nextcloud Talk**
+**Ficheiro:** `Manual_Nextcloud_Talk.md`  
+**Descrição:** Guia de instalação e utilização do Nextcloud Talk.
+
+**Conteúdo:**
+- Setup inicial
+- Chamadas de vídeo
+- Partilha de ficheiros
+- Integração com Home Assistant
+
+---
+
+### 📄 **Manual Nextcloud OnlyOffice**
+**Ficheiro:** `Manual_Nextcloud_OnlyOffice.md`  
+**Descrição:** Guia para edição colaborativa de documentos.
+
+**Conteúdo:**
+- Instalação OnlyOffice
+- Criar e editar documentos
+- Partilha de acesso
+- Colaboração em tempo real
+
+---
+
+### 📰 **Manual Paperless-NGX**
+**Ficheiro:** `Manual_Paperless_NGX.md`  
+**Descrição:** Sistema de arquivo digital de documentos.
+
+**Conteúdo:**
+- Setup e configuração
+- Digitalizar documentos
+- Tagging e organização
+- Pesquisa e recuperação
+- Integração com Home Assistant
+
+---
+
+## 🔗 Estrutura
+
+Cada manual está em formato Markdown (.md) para fácil leitura e partilha.
+
+---
+
+## 📖 Para Ler
+
+Abra qualquer ficheiro .md com:
+- Navegador (GitHub, GitLab, etc.)
+- Editor de texto (VS Code, Markdown Preview, etc.)
+- Aplicação Markdown (Obsidian, Typora, etc.)
+
+---
+
+**Última atualização:** 2 de Setembro de 2026  
+**Total de Manuais:** 5
+
+
+================================================================================
+FILE: Castelo Branco\scripts\readme.md
+================================================================================
+
+# 🔧 Scripts - Home Assistant
+
+Coleção de scripts reutilizáveis para automações e rotinas personalizadas no Home Assistant.
+
+## 📋 Scripts Disponíveis
+
+### 1. 📢 **Dynamic Notifications** (Notificações Dinâmicas com TTS)
+**Status:** 🔄 Em Desenvolvimento  
+**Localização:** `./dynamic_notifications/`  
+**Descrição:** Sistema de notificações dinâmicas com suporte a TTS (Text-to-Speech) e respeito pelos horários de silêncio configurados.
+
+**Funcionalidades:**
+- Notificações de voz (TTS) em português
+- Respeita horários de silêncio
+- Suporte a múltiplos canais
+- Priorização de mensagens
+- Integração com Alexa
+
+**Ficheiro YAML:** `dynamic_notifications.yaml`
+
+[📖 Ver Documentação](./dynamic_notifications/README.md)
+
+---
+
+### 2. 🚪 **Escalamento Aviso Porta** (Avisos em Cascata)
+**Status:** 🔄 Em Desenvolvimento  
+**Localização:** `./escalamento_aviso_porta/`  
+**Descrição:** Script para escalamento automático de avisos quando há eventos em portas/janelas.
+
+**Funcionalidades:**
+- Escalamento em 3 níveis (suave → médio → crítico)
+- Diferentes tipos de alerta por nível
+- Respeita horários de silêncio
+- Integração com notificações dinâmicas
+- Histórico de eventos
+
+**Ficheiro YAML:** `escalamento_aviso_porta.yaml`
+
+[📖 Ver Documentação](./escalamento_aviso_porta/README.md)
+
+---
+
+## 🚀 Como Usar Scripts
+
+### Chamar um Script de uma Automação
+
+```yaml
+automation:
+  - trigger: ...
+    action:
+      - action: script.[script_name]
+        data:
+          param1: value1
+          param2: value2
+```
+
+### Chamar um Script pelo Serviço
+
+```yaml
+service: script.[script_name]
+data:
+  param1: value1
+  param2: value2
+```
+
+### Estrutura de um Script
+
+Cada script está organizado assim:
+```
+[script_name]/
+├── [script_name].yaml           # Ficheiro do script
+└── README.md                    # Documentação detalhada
+```
+
+---
+
+## 📝 Convenção de Nomenclatura
+
+- **Diretórios:** `snake_case` (ex: `dynamic_notifications`)
+- **Ficheiros YAML:** `snake_case` (ex: `dynamic_notifications.yaml`)
+- **Documentação:** `README.md` (SEMPRE maiúscula)
+
+---
+
+## 🔗 Links Úteis
+
+- [Home Assistant Scripts Docs](https://www.home-assistant.io/docs/scripts/)
+- [Automations & Scripts](https://www.home-assistant.io/docs/automation/)
+
+---
+
+**Última atualização:** 2 de Setembro de 2026  
+**Total de Scripts:** 2 (ambos em desenvolvimento)
+
+
+================================================================================
+FILE: Castelo Branco\scripts\Dynamic notifications\README.md
+================================================================================
+
+# 📢 Dynamic Notifications - Script
+
+Sistema de notificações dinâmicas com suporte a TTS e respeito pelos horários de silêncio.
+
+## 📋 Descrição
+
+Script versátil para enviar notificações em português usando Text-to-Speech (TTS). Integra-se automaticamente com horários de silêncio configurados e suporta múltiplos canais de notificação.
+
+## 🎯 Funcionalidades
+
+- ✅ Notificações de voz em português
+- ✅ Respeita horários de silêncio
+- ✅ Suporte a múltiplos canais (Alexa, Notificações nativas, etc.)
+- ✅ Priorização de mensagens
+- ✅ Integração com input_boolean/input_select
+- ✅ Histórico de notificações
+
+## 🔧 Parâmetros
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `message` | texto | Mensagem a notificar |
+| `channel` | select | Canal de notificação (alexa, notify, etc.) |
+| `priority` | select | Nível de prioridade (low/normal/high) |
+| `volume` | número | Nível de volume (0-100) |
+
+## 📖 Documentação Completa
+
+[👈 Voltar ao índice de scripts](../README.md)
+
+**Status:** 🔄 Em Desenvolvimento
+
+
+================================================================================
+FILE: Castelo Branco\scripts\escalamento_aviso_porta\README.md
+================================================================================
+
+
+# 🚪 Escalamento Aviso Porta - Script
+
+Script para escalamento automático de avisos quando há eventos em portas/janelas.
+
+## 📋 Descrição
+
+Sistema em cascata para notificações de eventos de portas. Começa com avisos suaves e escala para alertas mais críticos se o evento não for resolvido.
+
+## 🎯 Funcionalidades
+
+- ✅ Escalamento em 3 níveis (suave → médio → crítico)
+- ✅ Diferentes tipos de alerta por nível
+- ✅ Respeita horários de silêncio
+- ✅ Integração com script de notificações dinâmicas
+- ✅ Histórico de eventos
+- ✅ Confirmação de resolução
+
+## 🔧 Parâmetros
+
+| Parâmetro | Tipo | Descrição |
+|-----------|------|-----------|
+| `target_sensor` | entity_id | Sensor que disparou o evento |
+| `zone_name` | texto | Nome da zona/local |
+| `escalation_levels` | número | Quantos níveis de escalamento (1-3) |
+| `timeout_per_level` | número | Tempo entre escalamentos (minutos) |
+
+## 📖 Documentação Completa
+
+[👈 Voltar ao índice de scripts](../README.md)
+
+**Status:** 🔄 Em Desenvolvimento
+
+
+================================================================================
+FILE: Castelo Branco\views\README.md
+================================================================================
+
+# 🎛️ Views - Dashboards Lovelace
+
+Visões e painéis de controlo personalizados para o Home Assistant.
+
+## 📋 Visões Disponíveis
+
+### 🌊 **Sistema de Rega**
+**Ficheiro:** `SistemaDeRega.yaml`  
+**Descrição:** Dashboard completo para monitorização e controlo do sistema de rega inteligente.
+
+**Componentes:**
+- Status de todos os setores de rega
+- Nível de humidade em tempo real
+- Controles manuais para rega de emergência
+- Histórico de operações
+- Alertas e notificações
+
+---
+
+## 🚀 Como Usar
+
+1. Copiar o ficheiro YAML desejado
+2. No Home Assistant: **Settings > Dashboards > Create Dashboard**
+3. Colar o conteúdo YAML
+4. Ajustar IDs de entidades conforme necessário
+5. Guardar e visualizar
+
+---
+
+## 📝 Convenção de Nomenclatura
+
+- **Ficheiros YAML:** `PascalCase.yaml` (ex: `SistemaDeRega.yaml`)
+- **Identificadores:** `snake_case` (ex: `system_rega_dashboard`)
+
+---
+
+**Última atualização:** 2 de Setembro de 2026  
+**Total de Visões:** 1 (Sistema de Rega)
+
+
+================================================================================
+FILE: Castelo Branco\automations\portas_monitor.yaml
+================================================================================
+
+id: portas_monitor_geral
+alias: "Segurança: Monitor de Abertura de Portas"
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.sensor_porta_principal
+      - binary_sensor.sensor_portao_garagem
+    to: "on"
+action:
+  - action: script.escalamento_aviso_porta
+    data:
+      target_sensor: "{{ trigger.entity_id }}"
+      nome_zona: >-
+        {{ 'Porta Principal' if trigger.entity_id == 'binary_sensor.sensor_porta_principal' else 'Garagem' }}
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\aviso_acessos_universal\aviso_acessos_universal.yaml
+================================================================================
+
+blueprint:
+  name: "Monitorização avançada de Portas com Central de Voz"
+  description: "v.2.3 - Modo Paralelo corrigido para evitar atrasos no fecho e falhas no restauro de luz."
+  domain: automation
+  input:
+    sensores_sempre:
+      name: Sensores - Sempre Ativos (Prioridade Máxima)
+      description: "Sensores que vão gerar notificações a qualquer hora. Ignoram as restrições."
+      default: []
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class:
+            - door
+            - window
+          multiple: true
+    sensores_horario:
+      name: Sensores - Com Horário Restrito
+      description: "Sensores sujeitos ao horário definido abaixo."
+      default: []
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class:
+            - door
+            - window
+          multiple: true
+    hora_inicio:
+      name: Ajudante Hora de Início
+      description: "Auxiliar (input_datetime) para início das notificações restritas."
+      selector:
+        entity:
+          domain: input_datetime
+    hora_fim:
+      name: Ajudante Hora de Fim
+      description: "Auxiliar (input_datetime) para fim das notificações restritas."
+      selector:
+        entity:
+          domain: input_datetime
+    tempo_alerta:
+      name: Tempo de Tolerância Aberta
+      description: "Tempo máximo permitido antes de repetir o aviso."
+      default: 5
+      selector:
+        number:
+          min: 1
+          max: 60
+          unit_of_measurement: minutes
+          mode: box
+    coluna_som:
+      name: Coluna de Som (Altifalante)
+      description: "Coluna que vai ditar os avisos por voz (TTS)."
+      selector:
+        entity:
+          domain: media_player
+    lampada_aviso:
+      name: Lâmpada de Aviso
+      description: "Lâmpada que vai piscar em caso de alerta (Opcional)."
+      default: []
+      selector:
+        entity:
+          domain: light
+    cor_da_luz:
+      name: Cor da Luz (RGB)
+      description: "Escolha a cor para o piscar da lâmpada."
+      default:
+      selector:
+        color_rgb: {}
+
+# FIX CRÍTICO: Alterado para paralelo para que o fecho da porta seja instantâneo
+mode: parallel
+max: 20
+
+variables:
+  grupo_restrito: !input sensores_horario
+  tempo_alerta_var: !input tempo_alerta
+  ajudante_in: !input hora_inicio
+  ajudante_fi: !input hora_fim
+  coluna_var: !input coluna_som
+  luz_var: !input lampada_aviso
+  cor_var: !input cor_da_luz
+
+trigger:
+  - platform: state
+    entity_id: !input sensores_sempre
+    from: "off"
+    to: "on"
+    id: porta_aberta
+  - platform: state
+    entity_id: !input sensores_horario
+    from: "off"
+    to: "on"
+    id: porta_aberta
+  - platform: state
+    entity_id: !input sensores_sempre
+    from: "on"
+    to: "off"
+    id: porta_fechada
+  - platform: state
+    entity_id: !input sensores_horario
+    from: "on"
+    to: "off"
+    id: porta_fechada
+
+condition: []
+
+action:
+  # 1. Anúncio inicial imediato
+  - action: script.funcao_notificacao_de_voz_dinamica
+    data:
+      mensagem: >
+        {% if trigger.to_state is defined %}
+          {% set nome = trigger.to_state.name %}
+          {% if trigger.id == 'porta_aberta' %}
+            A {{ nome }} foi aberta.
+          {% else %}
+            A {{ nome }} foi fechada.
+          {% endif %}
+        {% else %}
+          Isto é um teste manual de voz.
+        {% endif %}
+      target_media_player: "{{ coluna_var }}"
+      target_luz: "{{ luz_var }}"
+      cor_luz: "{{ cor_var }}"
+      forcar_prioridade: "{{ trigger.entity_id not in grupo_restrito }}"
+      auxiliar_inicio: "{{ ajudante_in }}"
+      auxiliar_fim: "{{ ajudante_fi }}"
+
+  # 2. Monitorização do tempo aberta (Apenas se o gatilho atual for abertura)
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'porta_aberta' }}"
+        sequence:
+          - repeat:
+              while:
+                - condition: template
+                  value_template: "{{ is_state(trigger.entity_id, 'on') }}"
+              sequence:
+                - delay:
+                    minutes: "{{ tempo_alerta_var | int }}"
+                
+                - condition: template
+                  value_template: "{{ is_state(trigger.entity_id, 'on') }}"
+                
+                # Alerta persistente repetido
+                - action: script.funcao_notificacao_de_voz_dinamica
+                  data:
+                    mensagem: "Atenção. A {{ trigger.to_state.name }} continua aberta há mais de {{ tempo_alerta_var }} minutos."
+                    target_media_player: "{{ coluna_var }}"
+                    target_luz: "{{ luz_var }}"
+                    cor_luz: "{{ cor_var }}"
+                    forcar_prioridade: "{{ trigger.entity_id not in grupo_restrito }}"
+                    auxiliar_inicio: "{{ ajudante_in }}"
+                    auxiliar_fim: "{{ ajudante_fi }}"
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Battery alerts\alerta_baterias_fracas_alexa.yaml
+================================================================================
+
+# ==============================================================================
+# TIPO DE ESTRUTURA: Blueprint / Modelo Reutilizável Dinâmico com Inputs de Utilizador
+# CATEGORIA: Manutenção e Telemetria de Hardware (Pilhas Sonoff Zigbee)
+# REUTILIZAÇÃO: Integrado com a Função de Notificação de Voz Dinâmica da Casa v2.4
+# ==============================================================================
+blueprint:
+  name: "Manutenção: Alerta Programável de Baterias Fracas via Central de Voz"
+  description: "Corre na programação escolhida pelo utilizador, analisa todos os sensores de bateria da casa e anuncia as pilhas críticas na coluna selecionada dinamicamente no painel geral."
+  domain: automation
+  input:
+    hora_aviso:
+      name: Hora do Alerta
+      description: "A hora do dia em que a automação vai verificar as pilhas."
+      default: "10:00:00"
+      selector:
+        time: {}
+    dias_semana:
+      name: Dias da Semana
+      description: "Selecione um ou múltiplos dias da semana para correr a verificação."
+      default: [7]
+      selector:
+        select:
+          multiple: true
+          custom_value: false
+          options:
+            - label: "Segunda-feira"
+              value: 1
+            - label: "Terça-feira"
+              value: 2
+            - label: "Quarta-feira"
+              value: 3
+            - label: "Quinta-feira"
+              value: 4
+            - label: "Sexta-feira"
+              value: 5
+            - label: "Sábado"
+              value: 6
+            - label: "Domingo"
+              value: 7
+    limiar_critico:
+      name: Limiar Crítico de Bateria (%)
+      description: "Notificar se a percentagem da pilha for inferior a este valor (Recomendado: 15%)."
+      default: 15
+      selector:
+        number:
+          min: 5
+          max: 30
+          step: 1
+          mode: slider
+          unit_of_measurement: "%"
+
+mode: single
+
+variables:
+  limiar_configurado: !input limiar_critico
+  dias_configurados: !input dias_semana
+
+trigger:
+  - platform: time
+    at: !input hora_aviso
+
+condition:
+  # Validação Híbrida Corrigida: Mapeia todos os itens recebidos para inteiro garantindo a correspondência matemática
+  - condition: template
+    value_template: "{{ now().isoweekday() | int in dias_configurados | map('int') | list }}"
+  
+  # Validação de Existência de Baterias utilizando filtro de segurança robusto para evitar quebras em Jinja2
+  - condition: template
+    value_template: >
+      {% set threshold = limiar_configurado | int %}
+      {{ states.sensor 
+         | selectattr('attributes.device_class', 'defined') 
+         | selectattr('attributes.device_class', 'eq', 'battery') 
+         | rejectattr('state', 'in', ['unavailable', 'unknown']) 
+
+         | map(attribute='state') | map('int', default=100) 
+         | select('lt', threshold) | list | length > 0 }}
+
+action:
+  # REUTILIZAÇÃO CRÍTICA: Encaminha a mensagem processada para o novo script dinâmico da casa
+  - action: script.funcao_notificacao_de_voz_dinamica
+    data:
+      mensagem: >
+        Aviso de manutenção doméstica. Foram detetadas pilhas com nível inferior a {{ limiar_configurado }} por cento nos seguintes equipamentos: 
+        {% set threshold = limiar_configurado | int %}
+        {% set ns = namespace(low_batteries=[]) %}
+        {% for s in states.sensor 
+           | selectattr('attributes.device_class', 'defined') 
+           | selectattr('attributes.device_class', 'eq', 'battery') 
+           | rejectattr('state', 'in', ['unavailable', 'unknown']) %}
+          {% if s.state | int(default=100) < threshold %}
+            {% set ns.low_batteries = ns.low_batteries + [s.name | replace(' Battery', '') | replace(' battery', '')] %}
+          {% endif %}
+        {% endfor %}
+        {{ ns.low_batteries | join(', ') }}. Por favor, providencie a substituição das pilhas correspondentes.
+      # Parâmetros padrão necessários para o teu script correr de forma limpa
+      target_media_player: media_player.avisos_sonoros
+      target_luz: none
+      cor_luz: [255, 120, 0] # Laranja para sinalizar aviso de manutenção técnica
+      forcar_prioridade: true # Força a passagem para que tu recebas o aviso visual fixo no canto inferior do menu
+      auxiliar_inicio: input_datetime.quiet_hours_start
+      auxiliar_fim: input_datetime.quiet_hours_end
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Smart Dumb Dehumidifier\gestao_desumidificador_inteligente.yaml
+================================================================================
+
+# ==============================================================================
+# TIPO DE ESTRUTURA: Blueprint / Modelo Reutilizável Dinâmico com Inputs de Utilizador
+# CATEGORIA: Climatização e Conforto (Controlo de Humidade e Desumidificador)
+# REUTILIZAÇÃO: v1.1 - Fusão de Ligar/Desligar com Notificação Inteligente Central
+# ==============================================================================
+blueprint:
+  name: "Climatização: Gestão Inteligente de Desumidificador"
+  description: "Controla a ativação e desativação do desumidificador com base em humidade, porta aberta, botão físico e horários."
+  domain: automation
+  input:
+    desumidificador_switch:
+      name: Tomada/Switch do Desumidificador
+      selector:
+        entity:
+          domain: switch
+    sensor_humidade:
+      name: Sensor de Humidade
+      selector:
+        entity:
+          domain: sensor
+          device_class: humidity
+    ajudante_limite_humidade:
+      name: Ajudante Limite de Humidade
+      description: "Auxiliar (input_number) que define a meta de humidade desejada."
+      selector:
+        entity:
+          domain: input_number
+    sensor_porta:
+      name: Sensor de Porta/Janela da Divisão
+      description: "Desliga o equipamento se a porta abrir para evitar desperdício."
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: door
+    botao_fisico:
+      name: Botão Sem Fios (Clique Manual)
+      description: "Entidade de evento do botão para controlo manual (ex: Botão 4)."
+      selector:
+        entity:
+          domain: event
+    # --- Parâmetros de Notificação e Horários ---
+    coluna_som:
+      name: Coluna de Som (Altifalante)
+      selector:
+        entity:
+          domain: media_player
+    lampada_aviso:
+      name: Lâmpada de Aviso (Opcional)
+      default: []
+      selector:
+        entity:
+          domain: light
+    cor_da_luz:
+      name: Cor da Luz (RGB)
+      description: "Escolha a cor para o piscar da lâmpada (Defeito: Azul)."
+      default:
+      selector:
+        color_rgb: {}
+    hora_inicio:
+      name: Ajudante Silêncio - Início
+      description: "Auxiliar (input_datetime) para o início do período de notificações de voz."
+      selector:
+        entity:
+          domain: input_datetime
+    hora_fim:
+      name: Ajudante Silêncio - Fim
+      description: "Auxiliar (input_datetime) para o fim do período de notificações de voz."
+      selector:
+        entity:
+          domain: input_datetime
+
+mode: queued
+max: 10
+
+variables:
+  switch_dev: !input desumidificador_switch
+  sensor_p: !input sensor_porta
+  limite_h: !input ajudante_limite_humidade
+  coluna_var: !input coluna_som
+  luz_var: !input lampada_aviso
+  cor_var: !input cor_da_luz
+  ajudante_in: !input hora_inicio
+  ajudante_fi: !input hora_fim
+
+trigger:
+  # Triggers para LIGAR ou DESLIGAR por Humidade
+  - platform: numeric_state
+    entity_id: !input sensor_humidade
+    above: !input ajudante_limite_humidade
+    id: humidade_alta
+  - platform: numeric_state
+    entity_id: !input sensor_humidade
+    below: !input ajudante_limite_humidade
+    id: humidade_baixa
+  # Trigger de Segurança: Porta aberta por mais de 15 segundos
+  - platform: state
+    entity_id: !input sensor_porta
+    to: "on"
+    for:
+      seconds: 15
+    id: porta_aberta
+  # Trigger Horário: Fim das horas de silêncio (pode ligar se precisar)
+  - platform: time
+    at: !input hora_fim
+    id: fim_silencio
+  # Trigger Manual: Clique no botão físico (Plataforma baseada em Eventos)
+  - platform: event
+    event_type: state_changed
+    event_data:
+      entity_id: !input botao_fisico
+    id: clique_botao
+
+condition: []
+
+action:
+  - choose:
+      # ========================================================================
+      # CENÁRIO A: LÓGICA PARA LIGAR
+      # ========================================================================
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ (trigger.id == 'humidade_alta' or trigger.id == 'fim_silencio') or 
+                 (trigger.id == 'clique_botao' and is_state(switch_dev, 'off')) }}
+          - condition: state
+            entity_id: !input desumidificador_switch
+            state: "off"
+          - condition: state
+            entity_id: !input sensor_porta
+            state: "off"
+          - condition: numeric_state
+            entity_id: !input sensor_humidade
+            above: !input ajudante_limite_humidade
+          - condition: time
+            after: !input hora_inicio
+            before: !input hora_fim
+        sequence:
+          - action: switch.turn_on
+            target:
+              entity_id: "{{ switch_dev }}"
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: "O desumidificador da cozinha foi ligado."
+              target_media_player: "{{ coluna_var }}"
+              target_luz: "{{ luz_var }}"
+              cor_luz: "{{ cor_var }}"
+              forcar_prioridade: false
+              auxiliar_inicio: "{{ ajudante_in }}"
+              auxiliar_fim: "{{ ajudante_fi }}"
+
+      # ========================================================================
+      # CENÁRIO B: LÓGICA PARA DESLIGAR
+      # ========================================================================
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ trigger.id == 'humidade_baixa' or trigger.id == 'porta_aberta' or 
+                 (trigger.id == 'clique_botao' and is_state(switch_dev, 'on')) }}
+          - condition: state
+            entity_id: !input desumidificador_switch
+            state: "on"
+        sequence:
+          - action: switch.turn_off
+            target:
+              entity_id: "{{ switch_dev }}"
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: >-
+                {% if trigger.id == 'porta_aberta' %}
+                  O desumidificador da cozinha foi desligado porque a porta foi aberta.
+                {% elif trigger.id == 'humidade_baixa' %}
+                  O desumidificador da cozinha foi desligado. A humidade atingiu o nível ideal.
+                {% else %}
+                  O desumidificador da cozinha foi desligado manualmente.
+                {% endif %}
+              target_media_player: "{{ coluna_var }}"
+              target_luz: "{{ luz_var }}"
+              cor_luz: "{{ cor_var }}"
+              forcar_prioridade: false
+              auxiliar_inicio: "{{ ajudante_in }}"
+              auxiliar_fim: "{{ ajudante_fi }}"
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Smart Snailmail Box\caixa_correio_inteligente.yaml
+================================================================================
+
+# ==============================================================================
+# TIPO DE ESTRUTURA: Blueprint / Modelo Reutilizável Dinâmico com Inputs de Utilizador
+# CATEGORIA: Logística e Monitorização Perimetral (Caixa de Correio)
+# REUTILIZAÇÃO: v2.3 - Totalmente Integrado com o Novo Script de Notificação Completa
+# ==============================================================================
+blueprint:
+  name: "Gestão de Caixa de Correio com Central de Voz Dinâmica"
+  description: "Monitoriza a entrada de cartas e a abertura da porta para recolha, incrementa o contador e chama a função central de voz da casa."
+  domain: automation
+  input:
+    sensor_movimento_ranhura:
+      name: Sensor de Movimento (Ranhura)
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion
+    sensor_porta_caixa:
+      name: Sensor de Abertura (Porta Principal)
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: door
+    contador_correio:
+      name: Ajudante Contador
+      selector:
+        entity:
+          domain: counter
+    # --- Novos Inputs Visuais de Integração ---
+    coluna_som:
+      name: Coluna de Som (Altifalante)
+      description: "Coluna que vai ditar os avisos por voz (TTS)."
+      selector:
+        entity:
+          domain: media_player
+    lampada_aviso:
+      name: Lâmpada de Aviso
+      description: "Lâmpada que vai piscar em caso de alerta (Opcional)."
+      default: []
+      selector:
+        entity:
+          domain: light
+    cor_da_luz:
+      name: Cor da Luz (RGB)
+      description: "Escolha a cor para o piscar da lâmpada."
+      default: [255, 255, 0] # Amarelo por defeito para correio
+      selector:
+        color_rgb: {}
+    forcar_prioridade_correio:
+      name: Forçar Prioridade Máxima
+      description: "Ative se quiser ser avisado mesmo durante o horário restrito."
+      default: false
+      selector:
+        boolean: {}
+    hora_inicio:
+      name: Ajudante Hora de Início
+      description: "Auxiliar (input_datetime) para início do período permitido (se não prioritário)."
+      selector:
+        entity:
+          domain: input_datetime
+    hora_fim:
+      name: Ajudante Hora de Fim
+      description: "Auxiliar (input_datetime) para fim do período permitido (se não prioritário)."
+      selector:
+        entity:
+          domain: input_datetime
+
+mode: single
+
+variables:
+  contador_entidade: !input contador_correio
+  coluna_var: !input coluna_som
+  luz_var: !input lampada_aviso
+  cor_var: !input cor_da_luz
+  prio_var: !input forcar_prioridade_correio
+  ajudante_in: !input hora_inicio
+  ajudante_fi: !input hora_fim
+
+trigger:
+  - platform: state
+    entity_id: !input sensor_movimento_ranhura
+    to: "on"
+    id: nova_carta
+  - platform: state
+    entity_id: !input sensor_porta_caixa
+    to: "on"
+    id: recolha_correio
+
+condition: []
+
+action:
+  - choose:
+      # CENÁRIO 1: Nova Carta Recebida
+      - conditions:
+          - condition: trigger
+            id: nova_carta
+          # Filtro de resguardo de 60 segundos para evitar disparos falsos repetidos
+          - condition: template
+            value_template: "{{ (now() - this.attributes.last_triggered | default(today_at(), true)).total_seconds() > 60 }}"
+        sequence:
+          - action: counter.increment
+            target:
+              entity_id: !input contador_correio
+          
+          # INTEGRADO: Envia dados para o novo script dinâmico com restauro de luz
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: >-
+                Atenção. Acabou de chegar correio à tua caixa postal.
+                Neste momento tens {{ states(contador_entidade) }} entregas pendentes para recolha.
+              target_media_player: "{{ coluna_var }}"
+              target_luz: "{{ luz_var }}"
+              cor_luz: "{{ cor_var }}"
+              forcar_prioridade: "{{ prio_var }}"
+              auxiliar_inicio: "{{ ajudante_in }}"
+              auxiliar_fim: "{{ ajudante_fi }}"
+
+      # CENÁRIO 2: Recolha do Correio Efetuada
+      - conditions:
+          - condition: trigger
+            id: recolha_correio
+        sequence:
+          - action: counter.reset
+            target:
+              entity_id: !input contador_correio
+          
+          # INTEGRADO: Envia o aviso de reposição para o script dinâmico
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: "Correio recolhido com sucesso. O contador de cartas foi reposto a zero."
+              target_media_player: "{{ coluna_var }}"
+              target_luz: "{{ luz_var }}"
+              cor_luz: "{{ cor_var }}"
+              forcar_prioridade: "{{ prio_var }}"
+              auxiliar_inicio: "{{ ajudante_in }}"
+              auxiliar_fim: "{{ ajudante_fi }}"
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Smart Universal Calendar\calendario_inteligente_universal.yaml
+================================================================================
+
+# ==============================================================================
+# TIPO DE ESTRUTURA: Blueprint / Modelo Reutilizável Dinâmico com Inputs
+# CATEGORIA: Agenda e Organização Familiar (Calendários)
+# REUTILIZAÇÃO: v1.1 - Totalmente Integrado com o Novo Script Central
+# ==============================================================================
+blueprint:
+  name: "Notificação Avançada de Calendário com Central de Voz"
+  description: "Anuncia eventos de um calendário específico com antecedência configurável, integrando luzes, cores e colunas dinâmicas."
+  domain: automation
+  input:
+    calendario_alvo:
+      name: Seleção do Calendário
+      description: "Escolha o calendário que pretende monitorizar."
+      selector:
+        entity:
+          domain: calendar
+    antecedencia_horas:
+      name: Antecedência do Alerta (Horas)
+      description: "Quantas horas antes do evento começar deve ser feito o aviso?"
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 24
+          unit_of_measurement: hours
+          mode: box
+    antecedencia_minutos:
+      name: Antecedência do Alerta (Minutos)
+      description: "Quantos minutos antes (adicionais às horas) deve ser feito o aviso?"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 59
+          unit_of_measurement: minutes
+          mode: box
+    coluna_som:
+      name: Coluna de Som (Altifalante)
+      description: "Selecione a coluna que vai ditar os avisos por voz (TTS)."
+      selector:
+        entity:
+          domain: media_player
+    lampada_aviso:
+      name: Lâmpada de Aviso
+      description: "Selecione a lâmpada que vai piscar in caso de alerta (Opcional)."
+      default: []
+      selector:
+        entity:
+          domain: light
+    cor_da_luz:
+      name: Cor da Luz (RGB)
+      description: "Escolha a cor para o piscar da lâmpada (Permite diferenciar os calendários)."
+      default: [0, 255, 0]
+      selector:
+        color_rgb: {}
+    forcar_prioridade_calendario:
+      name: Forçar Prioridade Máxima
+      description: "Ative se quiser que este calendário avise mesmo durante o horário de silêncio."
+      default: false
+      selector:
+        boolean: {}
+    hora_inicio:
+      name: Ajudante Hora de Início
+      description: "Auxiliar (input_datetime) para início do período permitido (se não prioritário)."
+      selector:
+        entity:
+          domain: input_datetime
+    hora_fim:
+      name: Ajudante Hora de Fim
+      description: "Auxiliar (input_datetime) para fim do período permitido (se não prioritário)."
+      selector:
+        entity:
+          domain: input_datetime
+
+mode: queued
+max: 10
+
+variables:
+  coluna_var: !input coluna_som
+  luz_var: !input lampada_aviso
+  cor_var: !input cor_da_luz
+  prio_var: !input forcar_prioridade_calendario
+  ajudante_in: !input hora_inicio
+  ajudante_fi: !input hora_fim
+
+trigger:
+  - trigger: calendar.event_started
+    target:
+      entity_id: !input calendario_alvo
+    options:
+      offset:
+        hours: !input antecedencia_horas
+        minutes: !input antecedencia_minutos
+      offset_type: before
+
+condition: []
+
+action:
+  - action: script.funcao_notificacao_de_voz_dinamica
+    data:
+      mensagem: >-
+        Lembrete de agenda. Daqui a pouco vai iniciar o evento: {{ trigger.calendar_event.summary }}.
+      target_media_player: "{{ coluna_var }}"
+      target_luz: "{{ luz_var }}"
+      cor_luz: "{{ cor_var }}"
+      forcar_prioridade: "{{ prio_var }}"
+      auxiliar_inicio: "{{ ajudante_in }}"
+      auxiliar_fim: "{{ ajudante_fi }}"
+
+
+================================================================================
+FILE: Castelo Branco\blueprints\Watering Sector\Watering_Sector.yaml
+================================================================================
+
+blueprint:
+  name: Automacao de Rega Otimizada com Cooldown Nativo e Interrupcao Manual
+  description: Controla a rega em dois ciclos com pausa para absorção. Interrompe imediatamente se o utilizador desligar a rega manualmente e possui salvaguarda de gatilho periódico.
+  domain: automation
+  input:
+    sector_name:
+      name: Nome do Setor
+      selector:
+        text:
+    soil_moisture_sensor:
+      name: Sensor de Humidade do Solo
+      selector:
+        entity:
+          domain: sensor
+    moisture_limit:
+      name: Humidade Ideal do Setor
+      selector:
+        entity:
+          domain: input_number
+    watering_duration:
+      name: Tempo Total de Rega (Minutos)
+      selector:
+        entity:
+          domain: input_number
+    cooldown_duration:
+      name: Tempo de Resguardo (Minutos)
+      selector:
+        entity:
+          domain: input_number
+    watering_switch:
+      name: Interruptor da Rega
+      selector:
+        entity:
+          domain: switch
+    soak_duration_minutes:
+      name: Tempo de Pausa para Absorcao
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 60
+          unit_of_measurement: min
+          mode: box
+    quiet_hours_start:
+      name: Inicio Horario TTS
+      selector:
+        entity:
+          domain: input_datetime
+    quiet_hours_end:
+      name: Fim Horario TTS
+      selector:
+        entity:
+          domain: input_datetime
+
+mode: single
+
+variables:
+  sector: !input sector_name
+  soil_sensor_var: !input soil_moisture_sensor
+  ideal_limit_var: !input moisture_limit
+  w_duration_entity: !input watering_duration
+  c_duration_entity: !input cooldown_duration
+  switch_target: !input watering_switch
+  ajudante_in: !input quiet_hours_start
+  ajudante_fi: !input quiet_hours_end
+
+trigger:
+  # Gatilho 1: Dispara no instante em que o sensor cruza a linha limite para baixo
+  - platform: template
+    id: humidade_baixa
+    value_template: >-
+      {{ states(soil_sensor_var) | float(0) < states(ideal_limit_var) | float(0) }}
+
+  # Gatilho 2: Salvaguarda periódica caso o gatilho principal ocorra durante o Cooldown
+  - platform: time_pattern
+    minutes: "/15"
+    id: verificacao_periodica
+
+condition:
+  # Condição 1: Garante o cumprimento estrito do Tempo de Resguardo (Cooldown)
+  - condition: template
+    value_template: >-
+      {{ this.attributes.last_triggered is none or
+      (as_timestamp(now()) - as_timestamp(this.attributes.last_triggered)) > (states(c_duration_entity) | int(0) * 60) }}
+  
+  # Condição 2: Garante que a verificação dos 15 minutos só avança se a humidade continuar de facto abaixo do ideal
+  - condition: template
+    value_template: >-
+      {{ states(soil_sensor_var) | float(0) = states(ideal_limit_var) | float(0) }}"
+        sequence:
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: "O setor {{ sector }} atingiu o limite de humidade ideal após o primeiro ciclo. Segundo ciclo abortado por segurança."
+              target_media_player: media_player.avisos_sonoros
+              forcar_priority: false
+              auxiliar_inicio: "{{ states(ajudante_in) }}"
+              auxiliar_fim: "{{ states(ajudante_fi) }}"
+          - stop: "Humidade ideal restabelecida após Ciclo 1"
+
+  # =======================================================================================
+  # --- CICLO 2 DE REGA ---
+  # =======================================================================================
+  - action: switch.turn_on
+    target:
+      entity_id: !input watering_switch
+
+  # Monitorização ativa de interrupção no Ciclo 2
+  - wait_for_trigger:
+      - platform: state
+        entity_id: !input watering_switch
+        to: "off"
+    timeout:
+      minutes: "{{ ((states(w_duration_entity) | float(0)) / 2) | int(0) }}"
+    continue_on_timeout: true
+
+  # Desliga fisicamente o equipamento no fim da automação
+  - action: switch.turn_off
+    target:
+      entity_id: !input watering_switch
+
+  # Determina se a paragem do Ciclo 2 ocorreu por fim do tempo ou por ação manual
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ wait.trigger is none }}"
+        sequence:
+          - action: script.funcao_notificacao_de_voz_dinamica
+            data:
+              mensagem: "O ciclo completo de rega do setor {{ sector }} foi concluído com sucesso."
+              target_media_player: media_player.avisos_sonoros
+              forcar_priority: false
+              auxiliar_inicio: "{{ states(ajudante_in) }}"
+              auxiliar_fim: "{{ states(ajudante_fi) }}"
+      default:
+        - action: script.funcao_notificacao_de_voz_dinamica
+          data:
+            mensagem: "Rega cancelada manualmente pelo utilizador no setor {{ sector }} durante o segundo ciclo."
+            target_media_player: media_player.avisos_sonoros
+            forcar_priority: true
+            auxiliar_inicio: "{{ states(ajudante_in) }}"
+            auxiliar_fim: "{{ states(ajudante_fi) }}"
+
+
+================================================================================
+FILE: Castelo Branco\scripts\Dynamic notifications\dynamic_notifications.yaml
+================================================================================
+
+alias: Notificação Inteligente Dinâmica Completa
+description: >-
+  Processa avisos de áudio, controlo visual de lâmpadas e alertas persistentes
+  no menu do Home Assistant.
+fields:
+  mensagem:
+    name: Mensagem a ditar
+    description: O texto que a casa vai converter em voz e registar no painel.
+    required: true
+    selector:
+      text: null
+  target_media_player:
+    name: Coluna de Destino
+    description: Selecione o altifalante que vai reproduzir a mensagem.
+    required: true
+    selector:
+      entity:
+        filter:
+          - domain: media_player
+    default: media_player.avisos_sonoros
+  target_luz:
+    name: Lâmpada de Aviso
+    description: Selecione a lâmpada que vai piscar em caso de alerta (Opcional).
+    required: false
+    selector:
+      entity:
+        filter:
+          - domain: light
+    default: light.antonio
+  cor_luz:
+    name: Cor do Alerta (RGB)
+    description: Escolha a cor para o piscar da lâmpada.
+    required: false
+    selector:
+      color_rgb: {}
+    default:
+      - 225
+      - 107
+      - 107
+  forcar_prioridade:
+    name: Forçar Prioridade Máxima
+    description: >-
+      Ative se o aviso dever ignorar o silêncio e gerar um alerta fixo no menu
+      do sistema.
+    required: false
+    default: false
+    selector:
+      boolean: {}
+  auxiliar_inicio:
+    name: Ajudante Hora de Início
+    description: Selecione o input_datetime geral que define o início do silêncio.
+    required: true
+    selector:
+      entity:
+        filter:
+          - domain: input_datetime
+    default: input_datetime.inicio_automatizacoes
+  auxiliar_fim:
+    name: Ajudante Hora de Fim
+    description: Selecione o input_datetime geral que define o fim do silêncio.
+    required: true
+    selector:
+      entity:
+        filter:
+          - domain: input_datetime
+    default: input_datetime.fim_automatizacoes
+sequence:
+  - action: tts.speak
+    target:
+      entity_id: tts.google_ai_tts
+    data:
+      media_player_entity_id: '{{ target_media_player | default(''media_player.avisos_sonoros'', true) }}'
+      message: '{{ mensagem | default(''Teste de som do sistema dinâmico.'', true) }}'
+      language: pt-PT
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: '{{ forcar_prioridade == true }}'
+        sequence:
+          - action: persistent_notification.create
+            data:
+              title: 🚨 Alerta Crítico do Sistema
+              message: |-
+                {{ mensagem }}
+
+                *Registado em: {{ now().strftime('%H:%M:%S') }}*
+              notification_id: alerta_critico_central_voz
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ target_luz is defined and target_luz != none and
+              states(target_luz) not in ['unknown', 'unavailable'] }}
+        sequence:
+          - action: scene.create
+            data:
+              scene_id: estado_anterior_luz_notificacao
+              snapshot_entities: '{{ target_luz }}'
+          - action: light.turn_on
+            target:
+              entity_id: '{{ target_luz }}'
+            data:
+              rgb_color: '{{ cor_luz | default() }}'
+              flash: short
+          - delay:
+              seconds: 3
+          - action: scene.turn_on
+            target:
+              entity_id: scene.estado_anterior_luz_notificacao
+
+
+================================================================================
+FILE: Castelo Branco\scripts\escalamento_aviso_porta\escalamento_aviso_porta.yaml
+================================================================================
+
+# =========================================================================================
+# HOME ASSISTANT - SCRIPT: escalamento_aviso_porta.yaml (Motor Centralizado)
+# =========================================================================================
+escalamento_aviso_porta:
+  alias: "Motor de Escalamento e Alarme de Portas Abertas"
+  description: "Trata da lógica de ciclos de 5 minutos e alarmes múltiplos ao 10º minuto para qualquer entidade."
+  fields:
+    target_sensor:
+      name: Sensor Alvo
+      description: "O binary_sensor que disparou o aviso (ex: binary_sensor.sensor_porta_principal)"
+      required: true
+      selector:
+        entity:
+          domain: binary_sensor
+    nome_zona:
+      name: Nome da Zona
+      description: "O nome em texto limpo para o TTS falar (ex: Porta Principal)"
+      required: true
+      selector:
+        text:
+
+  # 🔒 MODO RESTART: Se a porta for fechada e reaberta rapidamente, o script cancela
+  # o ciclo anterior e reinicia o cronómetro do zero de forma sádia!
+  mode: restart
+
+  sequence:
+    # --- ETAPA 1: Aguardar os primeiros 5 minutos ---
+    - delay:
+        minutes: 5
+
+    # Validar se a porta continua aberta após os 5 minutos
+    - condition: template
+      value_template: "{{ is_state(target_sensor, 'on') }}"
+
+    # Primeiro Aviso Suave (Apenas se o Alarmo NÃO estiver desarmado, conforme definiste)
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ not is_state('alarm_control_panel.alarmo', 'disarmed') }}"
+          sequence:
+            - action: script.funcao_notificacao_de_voz_dinamica
+              data:
+                mensagem: "Atenção, a {{ nome_zona }} encontra-se aberta há cinco minutos."
+                target_media_player: media_player.avisos_sonoros
+                forcar_priority: false
+
+    # --- ETAPA 2: Aguardar mais 5 minutos (Totalizando 10 minutos) ---
+    - delay:
+        minutes: 5
+
+    # --- ETAPA 3: ENTRAR EM MODO DE ALARME MÚLTIPLO (Loop de 1 em 1 minuto) ---
+    - repeat:
+        while:
+          # O loop corre indefinidamente ENQUANTO a porta se mantiver aberta ('on')
+          - condition: template
+            value_template: "{{ is_state(target_sensor, 'on') }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ not is_state('alarm_control_panel.alarmo', 'disarmed') }}"
+                sequence:
+                  - action: script.funcao_notificacao_de_voz_dinamica
+                    data:
+                      mensagem: "ALERTA CRÍTICO! A {{ nome_zona }} está aberta há mais de dez minutos! Por favor, feche a porta!"
+                      target_media_player: media_player.avisos_sonoros
+                      forcar_priority: true # Força o volume máximo nas colunas
+
+          # Intervalo de repetição entre os alarmes múltiplos do décimo minuto
+          - delay:
+              minutes: 1
+
+
+================================================================================
+FILE: Castelo Branco\views\SistemaDeRega.yaml
+================================================================================
+
+views:
+  - type: sections
+    sections:
+      - type: grid
+        cards:
+          - square: true
+            type: grid
+            cards:
+              - type: horizontal-stack
+                grid_options:
+                  columns: full
+                  column_span: 4
+                cards:
+                  - type: custom:config-template-card
+                    entities:
+                      - input_number.humidade_ideal_ne
+                      - sensor.smart_soil_tester_ne_humidade
+                    variables:
+                      hi: states['input_number.humidade_ideal_ne'].state
+                    card:
+                      title: 📐 SECÇÃO NE
+                      description: Perfil Dinâmico de Cultivo
+                      type: vertical-stack
+                      cards:
+                        - type: custom:modern-circular-gauge
+                          entity: sensor.smart_soil_tester_ne_humidade
+                          title: Nordeste
+                          show_gauge: outer
+                          header_position: top
+                          needle: true
+                          start_from_zero: false
+                          show_state: true
+                          show_unit: true
+                          smooth_segments: true
+                          adaptive_state_color: true
+                          show_header: false
+                          show_icon: true
+                          adaptive_icon_color: true
+                          gauge_type: half
+                          gauge_foreground_style:
+                            width: 8
+                            opacity: 0
+                            color: blue
+                          gauge_background_style:
+                            opacity: 0.27
+                            width: 10
+                          gauge_radius: 40
+                          adaptive_label_color: true
+                          secondary:
+                            entity: input_number.humidade_ideal_ne
+                            unit: '%'
+                            state_size: small
+                          icon: >-
+                            {% set var =
+                            states('sensor.jardim_ne_smart_soil_tester_ne_variacao_humidade_ne')
+                            | float(0) %} {% if var > 2.0 %}
+                              mdi:chevron-up-circle
+                            {% elif var < -2.0 %}
+                              mdi:chevron-down-circle
+                            {% else %}
+                              mdi:chevron-right-circle
+                            {% endif %}      unit: '%'
+                          tertiary:
+                            entity: >-
+                              sensor.jardim_ne_smart_soil_tester_ne_variacao_humidade_ne
+                          segments:
+                            - from: 0
+                              color:
+                                - 255
+                                - 0
+                                - 0
+                            - from: ${hi * 0.60}
+                              color:
+                                - 255
+                                - 255
+                                - 0
+                            - from: ${hi * 0.80}
+                              color:
+                                - 0
+                                - 255
+                                - 0
+                            - from: ${hi * 1.21}
+                              color:
+                                - 255
+                                - 255
+                                - 0
+                            - from: ${hi * 1.41}
+                              color:
+                                - 255
+                                - 0
+                                - 0
+                        - type: entities
+                          entities:
+                            - entity: input_select.perfil_planta_ne
+                              name: Tipo
+                            - entity: switch.4_433_interruptor_4
+                              name: Rega
+                        - type: history-graph
+                          entities:
+                            - entity: switch.4_433_interruptor_4
+                          hours_to_show: 24
+                  - type: custom:config-template-card
+                    entities:
+                      - input_number.humidade_ideal_se
+                      - sensor.smart_soil_tester_se_humidade
+                    variables:
+                      hi: states['input_number.humidade_ideal_se'].state
+                    card:
+                      type: vertical-stack
+                      title: 📐 SECÇÃO SE
+                      description: Perfil Dinâmico de Cultivo
+                      cards:
+                        - type: custom:modern-circular-gauge
+                          entity: sensor.smart_soil_tester_se_humidade
+                          title: Sudeste
+                          show_gauge: outer
+                          unit: '%'
+                          header_position: top
+                          needle: true
+                          start_from_zero: false
+                          show_state: true
+                          show_unit: true
+                          smooth_segments: true
+                          adaptive_state_color: true
+                          show_header: false
+                          show_icon: true
+                          adaptive_icon_color: true
+                          gauge_type: half
+                          gauge_foreground_style:
+                            width: 8
+                            opacity: 0
+                            color: blue
+                          gauge_background_style:
+                            opacity: 0.27
+                            width: 10
+                          gauge_radius: 40
+                          adaptive_label_color: true
+                          secondary:
+                            entity: input_number.humidade_ideal_se
+                            unit: '%'
+                            state_size: small
+                          icon: >-
+                            {% set var =
+                            states('sensor.jardim_se_smart_soil_tester_se_variacao_humidade_se')
+                            | float(0) %} {% if var > 2.0 %}
+                              mdi:chevron-up-circle
+                            {% elif var < -2.0 %}
+                              mdi:chevron-down-circle
+                            {% else %}
+                              mdi:chevron-right-circle
+                            {% endif %}      unit: '%'
+                          tertiary:
+                            entity: >-
+                              sensor.jardim_se_smart_soil_tester_se_variacao_humidade_se
+                          segments:
+                            - from: 0
+                              color:
+                                - 255
+                                - 0
+                                - 0
+                            - from: ${hi * 0.60}
+                              color:
+                                - 255
+                                - 255
+                                - 0
+                            - from: ${hi * 0.80}
+                              color:
+                                - 0
+                                - 255
+                                - 0
+                            - from: ${hi * 1.21}
+                              color:
+                                - 255
+                                - 255
+                                - 0
+                            - from: ${hi * 1.41}
+                              color:
+                                - 255
+                                - 0
+                                - 0
+                        - type: entities
+                          entities:
+                            - entity: input_select.perfil_planta_se
+                              name: Tipo
+                            - entity: switch.4_433_interruptor_3
+                              name: Rega
+                        - type: history-graph
+                          entities:
+                            - entity: switch.4_433_interruptor_3
+                          hours_to_show: 24
+            columns: 1
+            grid_options:
+              columns: 16
+              rows: auto
+          - type: vertical-stack
+            cards:
+              - type: markdown
+                content: >-
+                  | Perfil | Alvo | Rega (80%) | Excesso (120%) | Exemplos |
+
+                  | :--- | :---: | :---: | :---: | :--- |
+
+                  | **Seco** | **20%** | **16%** | **24%** | Alecrim, Tomilho,
+                  Cactos |
+
+                  | **Médio** | **35%** | **28%** | **42%** | Salsa, Coentros,
+                  Orégãos |
+
+                  | **Húmido** | **50%** | **40%** | **60%** | Manjericão,
+                  Hortelã |
+
+
+                  ***
+
+
+                  💡 **Nota de Segurança:** A automação intermédia de dupla
+                  validação monitoriza o solo após o primeiro ciclo. Se o
+                  canteiro ultrapassar os **120% do Alvo** durante a pausa de
+                  absorção, o segundo ciclo é cancelado para evitar asfixia
+                  radicular.
+
+
+                  🔴 Zona Vermelha Inferior (Seca Crítica): Abaixo de 60% da
+                  humidade ideal. A planta corre risco imediato de desidratação
+                  e murchamento.
+
+
+                  🟡 Zona Amarela Inferior (Alerta de Seca): De 60% a 79% da
+                  humidade ideal. O solo está a ficar demasiado seco; precisa de
+                  rega em breve.
+
+
+                  🟢 Zona Verde (Ideal): De 80% a 120% da humidade ideal. O
+                  balanço perfeito de água e oxigénio para as raízes.
+
+
+                  🟡 Zona Amarela Superior (Alerta de Excesso): De 121% a 140%
+                  da humidade ideal. O solo está muito saturado; deve suspender
+                  as regas.
+
+
+                  🔴 Zona Vermelha Superior (Encharcamento Crítico): Acima de
+                  140% da humidade ideal. Risco elevado de asfixia radicular e
+                  podridão das raízes por fungos.
+                title: '🌿 Tabela de Humidade por Perfil:'
+            grid_options:
+              columns: 20
+              rows: auto
+        column_span: 4
+    badges: []
+
+
+================================================================================
+FILE: tools\export.ps1
+================================================================================
+
+$RepositoryRoot = Split-Path $PSScriptRoot -Parent
+
+$ToolkitScript = Join-Path `
+    (Split-Path $RepositoryRoot -Parent) `
+    "Cravo-Toolkit\exporters\repository-export.ps1"
+
+Push-Location $RepositoryRoot
+
+try
+{
+    & $ToolkitScript
+}
+finally
+{
+    Pop-Location
+}
+
